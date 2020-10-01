@@ -6,7 +6,7 @@ const initialState={
 const LoginState=(state=initialState,action)=>{
     switch (action && action.type) {
         case "SET_AUTHRIZATION":
-            return {...state, authrizations: action.loginData}
+            return {...state, authrizations: action.loginData.access_token}
         default:
             return state;
     }

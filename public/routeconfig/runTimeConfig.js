@@ -1,3 +1,3 @@
 window['runConfig'] = {
-    apiUrl:'http://localhost:8005/api/'
+    apiUrl:'http://localhost:8006/hotel-backend/public/api'
 }

@@ -1,9 +1,8 @@
-import { CreateInstance } from "../../config/APIConfig"
-
-const GetUserList=()=>{
+import { CreateInstance } from '../../assets/config/Config'
+const GetLogin=(loginData)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .get('/employee/employee.php ',{
+            .post('/auth/login',loginData,{
                 headers:{
                     "Content-Type":"application/json"
                 }
@@ -21,5 +20,5 @@ export function saveAuthrozation(loginData){
 }
 
 export {
-    GetUserList
+    GetLogin
 }
