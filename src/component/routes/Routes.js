@@ -82,10 +82,10 @@ export default [
         path:"/settings",
         component:Settings,
     },
-    {
-        icon:faUserTimes,
-        name:"Logout",
-        path:"/logout",
-        component:Logout,
-    }
+    // {
+    //     icon:faUserTimes,
+    //     name:"Logout",
+    //     path:"/logout",
+    //     component:Logout,
+    // }
 ]

@@ -1,4 +1,5 @@
 import { CreateInstance } from '../../assets/config/Config'
+
 const GetLogin=(loginData)=>{
     return(dispatch)=>{
         return CreateInstance()
@@ -8,9 +9,23 @@ const GetLogin=(loginData)=>{
                 }
             })
             .then(response => dispatch(saveAuthrozation(response.data)) )
-            .catch(error => console.log("Error ", error))
+            .catch(error => {
+                if(error && error.response &&error.response.status === 401){
+                    dispatch(saveMessage("Please check your credtional","error"));
+                }else{
+                    dispatch(saveMessage("Something went worng...!","error"))
+                }
+            })
     }
 }
+
+const UserLogout=()=>{
+    console.log("Called UserLogout")
+    return(dispatch)=>{
+        return dispatch(clearData());
+    }
+}
+
 //---------------------------
 export function saveAuthrozation(loginData){
     return{
@@ -19,6 +34,22 @@ export function saveAuthrozation(loginData){
     }
 }
 
+export function saveMessage(message,color){
+    return{
+        type: "SET_LOGIN_MESSAGE",
+        message,
+        color
+    }
+}
+
+export function clearData(){
+    console.log("Called Clear Data")
+    return{
+        type:"CLEAR_DATA"
+    }
+}
+
 export {
-    GetLogin
+    GetLogin,
+    UserLogout
 }
