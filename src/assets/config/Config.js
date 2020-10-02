@@ -7,9 +7,19 @@ const CreateInstance=()=> {
     });
     return instance;
 }
+
+const FromActions={
+  "CR":"CREATE",
+  "VI": "VIEW",
+  "ED":"EDIT",
+  "DE":"DELETE",
+  "VIED":"VIEWEDIT"
+}
+
 export{
     API_EXE_TIME,
     apiUrl,
-    CreateInstance
+    CreateInstance,
+    FromActions
 }
 

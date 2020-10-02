@@ -62,9 +62,9 @@ article{
 	margin-right: 1%;
 	padding-top:2%;
 	
-	width:calc(82% - 230px);
-	width:-moz-calc(82% - 230px);
-	width:-webkit-calc(82% - 230px);
+	width:calc(90% - 230px);
+	width:-moz-calc(90% - 230px);
+	width:-webkit-calc(90% - 230px);
 	
 	padding-bottom: 150px;
 }
@@ -157,7 +157,7 @@ h2{
 	}
 	article{
 		float:left;
-		width:90%;
+		width:100%;
 		margin-left: 5%;
 		margin-right: 5%;
 		padding-top:50px;

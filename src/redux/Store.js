@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import logger from 'redux-logger';
 import { reducer as reduxFormReducer } from 'redux-form';
 import LoginState from '../redux/reducers/LoginState'
+import StoreState from '../redux/reducers/StoreState'
 
 // this function save state into local storage.
 const saveToLocalStorage=(state)=>{
@@ -37,7 +38,8 @@ const saveToLocalStorage=(state)=>{
   // in this function we combine the differnt reducer for single store
   const reducer = combineReducers({
     form: reduxFormReducer, // mounted under "form"
-    LoginState
+    LoginState,
+    StoreState
   });
   
   // this functions apply logger funtionality during development mode 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Loader from '../utilites/Loader';
+import StoreTable from './StoreTable';
 
 class StoreManagement extends Component {
     state = { 
@@ -12,7 +13,7 @@ class StoreManagement extends Component {
 
     handelLoadStoreItem=()=>{this.setState({ loadStoreItem: !this.state.loadStoreItem})}
     
-    handelFromAction=(operation, fromAction)=>{this.setState({fromAction: !this.state.fromAction, operation})}
+    handelFromAction=(storeData, operation)=>{this.setState({fromAction: !this.state.fromAction, operation, storeData})}
 
 
     render() { 
@@ -30,7 +31,9 @@ class StoreManagement extends Component {
     }
 
     loadingStoreTable=()=>{
-        return <h2>Store Table</h2>
+        return <StoreTable
+            fromAction={this.handelFromAction} 
+        />
     }
 }
 

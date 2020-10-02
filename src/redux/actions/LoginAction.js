@@ -20,7 +20,6 @@ const GetLogin=(loginData)=>{
 }
 
 const UserLogout=()=>{
-    console.log("Called UserLogout")
     return(dispatch)=>{
         return dispatch(clearData());
     }
@@ -43,7 +42,6 @@ export function saveMessage(message,color){
 }
 
 export function clearData(){
-    console.log("Called Clear Data")
     return{
         type:"CLEAR_DATA"
     }

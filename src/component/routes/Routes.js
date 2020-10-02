@@ -7,8 +7,7 @@ import TablesManagement from '../tables/TablesManagement';
 import ProductsManagement from '../products/ProductsManagement';
 import ProfileManagement from '../profile/ProfileManagement'
 import Settings from '../settings/Settings'
-import Logout from '../logout/Logout';
-import { faHome, faBookOpen, faUser, faUsers, faStore, faTable, faCookie, faUserAlt, faSun, faUserTimes } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faBookOpen, faUser, faUsers, faStore, faTable, faCookie, faUserAlt, faSun } from "@fortawesome/free-solid-svg-icons";
 
 export default [
     {
@@ -81,11 +80,5 @@ export default [
         name:"Settings",
         path:"/settings",
         component:Settings,
-    },
-    // {
-    //     icon:faUserTimes,
-    //     name:"Logout",
-    //     path:"/logout",
-    //     component:Logout,
-    // }
+    }
 ]

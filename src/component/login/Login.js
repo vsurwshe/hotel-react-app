@@ -54,7 +54,7 @@ let LoginFrom=(props)=>{
 					<span className="login100-form-title p-b-49"> Login </span>
 					<Field name="email" component={renderTextFiled} type="email" placeholder="Enter your email"  />
                     <Field name="password" component={renderTextFiled} type="password" placeholder="Enter your password"  />
-					{loading && <Loader message="Loading" size={40} />}
+					{loading && <Loader message="" size={40} />}
                     <div className="text-right p-t-8 p-b-31"> <a href="/"> Forgot password? </a></div>
 					<div className="container-login100-form-btn">
 						<div className="wrap-login100-form-btn">
