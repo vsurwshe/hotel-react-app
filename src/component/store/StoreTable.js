@@ -8,7 +8,7 @@ import { FromActions } from '../../assets/config/Config';
 import { Button } from '@material-ui/core';
 
 const StoreTable=(props)=>{
-  const { storeFromAction, deleteMethod }=props
+  const { storeFromAction }=props
   const { listOfStoreItem }=props.StoreState
   const columns = [
       { title: 'Sr.\u00a0No.', field: 'key', width: 20 },
@@ -20,21 +20,21 @@ const StoreTable=(props)=>{
         title: "",
         width:8,
         render: (rowData)=> {
-            return<VisibilityIcon variant="contained" color="primary" onClick={()=>storeFromAction(rowData.data,FromActions.VI,true)} />
+            return<VisibilityIcon variant="contained" color="primary" onClick={()=>storeFromAction(rowData.data,FromActions.VI)} />
         }
       },
       {
         title: "",
         width:8,
         render: (rowData)=> {
-            return<CreateIcon variant="contained" color="primary" onClick={()=>storeFromAction(rowData.data,FromActions.ED,true)} />
+            return<CreateIcon variant="contained" color="primary" onClick={()=>storeFromAction(rowData.data,FromActions.ED)} />
         }
       },
       {
         title: "",
         width:8,
         render: (rowData)=> {
-            return <DeleteOutlineIcon variant="contained" color="secondary" onClick={()=>deleteMethod(rowData.data)} />
+            return <DeleteOutlineIcon variant="contained" color="secondary" onClick={()=>storeFromAction(rowData.data,FromActions.DE)} />
         }
       }  
     ];

@@ -1,23 +1,25 @@
 import React,{useState} from 'react';
 import { Button } from '@material-ui/core';
 import { Field, reduxForm, reset } from 'redux-form';
-import { renderFromTextFiled } from '../utilites/FromUtilites';
+import { capitalizeFirstLatter, renderFromTextFiled } from '../utilites/FromUtilites';
 import Loader from '../utilites/Loader';
+import { FromActions } from '../../assets/config/Config';
 
 const StoreFrom=(props)=>{
     const {SaveMethod, pristine, reset, submitting, handleSubmit, operation, cancel }=props
     const [loading, setLoading] = useState(false);
+    console.log("OP", operation)
     return <div className="card" style={{width:"100%"}}>
         <div className="card-header">
-            <h5 className="card-title">Hotel Table</h5>
+            <h5 className="card-title">{capitalizeFirstLatter(operation+"")} Hotel Table Record</h5>
         </div>
         <div className="card-body">
-            <form onSubmit={handleSubmit( values=>SaveMethod({data: values, setLoading}))}>
+            <form onSubmit={handleSubmit( values=>SaveMethod({data: values, setLoading, operation}))}>
                 {LoadFileds()}
                 {loading && <Loader message="Saving Record" size={50} />}
                 <center>
-                    <Button type="submit" variant="outlined" color="primary" disabled={pristine || submitting}>  SUBMIT</Button> &nbsp;&nbsp;
-                    <Button type="button" variant="outlined" color="secondary" disabled={pristine || submitting} onClick={reset}> Clear Values</Button>&nbsp;&nbsp;
+                    { operation !== FromActions.VI &&  <><Button type="submit" variant="outlined" color="primary" disabled={(pristine || submitting) && operation !== FromActions.DE}>{operation}</Button> &nbsp;&nbsp;
+                    <Button type="button" variant="outlined" color="secondary" disabled={pristine || submitting} onClick={reset}> Clear Values</Button>&nbsp;&nbsp; </>}
                     <Button type="button" variant="outlined" color="secondary" onClick={async () => {await reset(); await cancel()}}> Cancel</Button>
                 </center>
             </form>

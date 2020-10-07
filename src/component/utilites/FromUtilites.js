@@ -60,12 +60,16 @@ const renderPaperTextFiled=({ label, name, input, placeholder, helperText, type,
     </div>
 )
     
-
+const capitalizeFirstLatter = (string) => {
+    if (typeof string !== 'string') return ''
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
 
 
 export{
     renderTextFiled,
     renderFromTextFiled,
     renderMATextField,
-    renderPaperTextFiled
+    renderPaperTextFiled,
+    capitalizeFirstLatter
 }

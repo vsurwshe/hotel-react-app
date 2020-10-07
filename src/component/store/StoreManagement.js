@@ -5,7 +5,7 @@ import StoreTable from './StoreTable';
 import * as StoreAction from '../../redux/actions/StoreAction'
 import { bindActionCreators } from 'redux';
 import StoreFrom from './StoreFrom';
-import { API_EXE_TIME } from '../../assets/config/Config';
+import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
 class StoreManagement extends Component {
     state = { 
         loadStoreItem:false,
@@ -16,7 +16,7 @@ class StoreManagement extends Component {
 
     componentDidMount=async()=>{
         const { authrizations }= this.props.LoginState
-        const { listOfStoreItem }= this.props.LoginState
+        const { listOfStoreItem }= this.props.StoreState
         const { GetListOfStoreItem}=this.props.StoreAction
         await this.handelLoadStoreItem();
         (listOfStoreItem && listOfStoreItem<=0) && await GetListOfStoreItem(authrizations);
@@ -33,10 +33,12 @@ class StoreManagement extends Component {
     }
 
     loadStoreForm=(storeData)=>{
+        const { operation }=this.state
         return <StoreFrom 
-            SaveMethod={this.callSaveStoreApi}
+            SaveMethod={this.callStoreApi}
             cancel={this.handelFromAction}
-            storeData={storeData}
+            initialValues={storeData}
+            operation={operation}
         />
     }
 
@@ -51,12 +53,18 @@ class StoreManagement extends Component {
         />
     }
 
-    callSaveStoreApi=async(props)=>{
-        const { data, setLoading}=props
+    callStoreApi=async(props)=>{
+        const { data, setLoading, operation}=props
         const { authrizations }= this.props.LoginState
-        const { GetListOfStoreItem, saveStoreItemRecord}=this.props.StoreAction
+        const { GetListOfStoreItem, saveStoreItemRecord, updateStoreItemRecord, deleteStoreItemRecord}=this.props.StoreAction
         await setLoading(true);
-        await saveStoreItemRecord(data, authrizations);
+        if(operation === FromActions.CR){
+            await saveStoreItemRecord(data, authrizations);
+        }else if(operation === FromActions.ED){
+            await updateStoreItemRecord(data, authrizations);
+        }else if(operation === FromActions.DE){
+            await deleteStoreItemRecord(data, authrizations);
+        }
         setTimeout(async()=>{
             await GetListOfStoreItem(authrizations);
             await setLoading(false);

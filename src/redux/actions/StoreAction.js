@@ -31,7 +31,7 @@ const saveStoreItemRecord=(storeItemData,authrizationKey)=>{
 const updateStoreItemRecord=(storeItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .put('/store/save/'+storeItemData.store_id,storeItemData,{
+            .put('/store/update/'+storeItemData.store_id,storeItemData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
@@ -45,7 +45,7 @@ const updateStoreItemRecord=(storeItemData,authrizationKey)=>{
 const deleteStoreItemRecord=(storeItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .delete('/store/save/'+storeItemData.store_id,{
+            .delete('/store/delete/'+storeItemData.store_id,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
