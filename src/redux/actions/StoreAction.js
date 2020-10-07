@@ -9,7 +9,7 @@ const GetListOfStoreItem=(authrizationKey)=>{
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(saveStoreItemList(response.data)) )
+            .then(response => dispatch(saveStoreItemList(response.data && response.data.data)) )
             .catch(error => console.log("Error ", error))
     }
 }

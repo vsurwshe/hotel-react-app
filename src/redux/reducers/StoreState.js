@@ -8,7 +8,7 @@ const StoreState=(state=initialState, action)=>{
     switch (action && action.type) {
         case "SAVE_STORE_ITEM_LIST":
             return {...state, listOfStoreItem: action.storeItemList}
-        case "SAVE_STORE_ITEM_LIST":
+        case "SAVE_STORE_ITEM_DATA":
             return {...state, storeItemData: action.storeItemData}
         case "UPDATE_STORE_ITEM_DATA":
             return {...state, storeItemData: action.storeItemData}

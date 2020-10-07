@@ -1,82 +1,58 @@
 import Dashboard from '../dashboard/Dashboard';
 import OrdersManagement from '../orders/OrdersManagement';
 import UsersManagement from '../users/UsersManagement';
-import GroupsManagement from '../groups/GroupsManagement';
 import StoreManagement from '../store/StoreManagement';
 import TablesManagement from '../tables/TablesManagement';
 import ProductsManagement from '../products/ProductsManagement';
 import ProfileManagement from '../profile/ProfileManagement'
 import Settings from '../settings/Settings'
-import { faHome, faBookOpen, faUser, faUsers, faStore, faTable, faCookie, faUserAlt, faSun } from "@fortawesome/free-solid-svg-icons";
+
 
 export default [
     {
-        icon:faHome,
+        icon:"nc-icon nc-diamond",
         name:"Dashboard",
         path:"/",
         component:Dashboard,
     },
     {
-        icon:faBookOpen,
+        icon:"nc-icon nc-paper",
         name:"Orders",
         path:"/orders",
-        component:OrdersManagement,
-        downArrow:"fas fa-caret-down",
-        child:[
-            {name:"Manage Orders", path:"/orders/manageUser", component:{}}
-        ]
+        component:OrdersManagement
     },
     {
-        icon:faUser,
+        icon:"nc-icon nc-single-02",
         name:"Users",
         path:"/users",
-        component:UsersManagement,
-        downArrow:"fas fa-caret-down",
-        child:[
-            {name:"Manage Users", path:"/users/manageUser", component:{}}
-        ]
+        component:UsersManagement
     },
     {
-        icon:faUsers,
-        name:"Groups",
-        path:"/groups",
-        component:GroupsManagement,
-        downArrow:"fas fa-caret-down",
-        child:[
-            {name:"Manage Groups", path:"/groups/manageGroup", component:{}},
-        ]
-    },
-    {
-        icon:faStore,
+        icon:"nc-icon nc-shop",
         name:"Stores",
         path:"/stores",
         component:StoreManagement,
     },
     {
-        icon:faTable,
+        icon:"nc-icon nc-app",
         name:"Tables",
         path:"/tables",
         component:TablesManagement,
     },
     {
-        icon:faCookie,
+        icon:"nc-icon nc-bag-16",
         name:"Products",
         path:"/products",
-        component:ProductsManagement,
-        downArrow:"fas fa-caret-down",
-        child:[
-            {name:"Add Products", path:"/products/addProducts", component:{}},
-            {name:"Manage Products", path:"/products/manageProducts", component:{}}
-        ]
+        component:ProductsManagement
     },
     {
-        icon:faUserAlt,
+        icon:"nc-icon nc-alert-circle-i",
         name:"Profile",
         path:"/profile",
         component:ProfileManagement,
     },
     {
-        icon:faSun,
+        icon:"nc-icon nc-settings",
         name:"Settings",
         path:"/settings",
         component:Settings,

@@ -2,8 +2,9 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from "redux-thunk";
 import logger from 'redux-logger';
 import { reducer as reduxFormReducer } from 'redux-form';
-import LoginState from '../redux/reducers/LoginState'
-import StoreState from '../redux/reducers/StoreState'
+import LoginState from '../redux/reducers/LoginState';
+import StoreState from '../redux/reducers/StoreState';
+import HotelTableState from '../redux/reducers/HotelTableState';
 
 // this function save state into local storage.
 const saveToLocalStorage=(state)=>{
@@ -39,14 +40,15 @@ const saveToLocalStorage=(state)=>{
   const reducer = combineReducers({
     form: reduxFormReducer, // mounted under "form"
     LoginState,
-    StoreState
+    StoreState,
+    HotelTableState
   });
   
   // this functions apply logger funtionality during development mode 
   const enhancer= compose(applyMiddleware(thunk, logger));
   
   // this is common action through out application will be used
-  const initialState = reducer({})
+  const initialState = reducer({},{},{})
   const rootReducer = (state, action) => {
     if (action.type === 'CLEAR_DATA') {
       state = initialState
