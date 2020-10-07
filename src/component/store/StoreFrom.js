@@ -11,12 +11,12 @@ const StoreFrom=(props)=>{
     console.log("OP", operation)
     return <div className="card" style={{width:"100%"}}>
         <div className="card-header">
-            <h5 className="card-title">{capitalizeFirstLatter(operation+"")} Hotel Table Record</h5>
+            <h5 className="card-title">{capitalizeFirstLatter(operation+"")} Store Record</h5>
         </div>
         <div className="card-body">
             <form onSubmit={handleSubmit( values=>SaveMethod({data: values, setLoading, operation}))}>
                 {LoadFileds()}
-                {loading && <Loader message="Saving Record" size={50} />}
+                {loading && <Loader message={capitalizeFirstLatter(operation)+" Record"} size={50} />}
                 <center>
                     { operation !== FromActions.VI &&  <><Button type="submit" variant="outlined" color="primary" disabled={(pristine || submitting) && operation !== FromActions.DE}>{operation}</Button> &nbsp;&nbsp;
                     <Button type="button" variant="outlined" color="secondary" disabled={pristine || submitting} onClick={reset}> Clear Values</Button>&nbsp;&nbsp; </>}

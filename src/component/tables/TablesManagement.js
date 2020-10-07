@@ -5,6 +5,7 @@ import Loader from '../utilites/Loader';
 import * as HotelTableAction from '../../redux/actions/HotelTableAction';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
 
 class TableManagement extends Component {
     state = { 
@@ -28,15 +29,17 @@ class TableManagement extends Component {
     handelFromAction=(hotelTableData, operation)=>{this.setState({formAction: !this.state.formAction, operation, hotelTableData})}
 
     render() { 
-        const { formAction }=this.state
-        return formAction ? this.loadHotelTableFrom() : this.loadHotelTable();
+        const { formAction, hotelTableData }=this.state
+        return formAction ? this.loadHotelTableFrom(hotelTableData) : this.loadHotelTable();
     }
 
-    loadHotelTableFrom=()=>{
+    loadHotelTableFrom=(hotelTableData)=>{
         const { operation }=this.state
         return <HotelTabelFrom
-            SaveMethod={this.CallSaveHotelTable}
+            SaveMethod={this.callHotelTableApi}
             operation={operation}
+            initialValues={hotelTableData}
+            cancel={this.handelFromAction}
         />
     }
 
@@ -48,12 +51,26 @@ class TableManagement extends Component {
     loadingHotelTable=()=>{
         return <HotelTabel 
             fromAction={this.handelFromAction}
-            SaveMethod={this.CallSaveHotelTable}
         />
     }
 
-    CallSaveHotelTable=(sendUserValues)=>{
-        console.log("Data ",sendUserValues);
+    callHotelTableApi=async(props)=>{
+        const { data, setLoading, operation}=props
+        const { authrizations }= this.props.LoginState
+        const { getListOfHotelTable, saveHotelTableRecord, updateHotelTableRecord, deleteHotelTableRecord}=this.props.HotelTableAction
+        await setLoading(true);
+        if(operation === FromActions.CR){
+            await saveHotelTableRecord(data, authrizations);
+        }else if(operation === FromActions.ED){
+            await updateHotelTableRecord(data, authrizations);
+        }else if(operation === FromActions.DE){
+            await deleteHotelTableRecord(data, authrizations);
+        }
+        setTimeout(async()=>{
+            await getListOfHotelTable(authrizations);
+            await setLoading(false);
+            await this.handelFromAction();
+        },API_EXE_TIME)
     }
 }
 

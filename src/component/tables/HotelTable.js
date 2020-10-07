@@ -20,21 +20,21 @@ const HotelTabel=(props)=>{
         title: "",
         width:8,
         render: (rowData)=> {
-            return<VisibilityIcon variant="contained" color="primary" onClick={()=>fromAction(rowData.data,FromActions.VI,true)} />
+            return<VisibilityIcon variant="contained" color="primary" onClick={()=>fromAction(rowData.data,FromActions.VI)} />
         }
       },
       {
         title: "",
         width:8,
         render: (rowData)=> {
-            return<CreateIcon variant="contained" color="primary" onClick={()=>fromAction(rowData.data,FromActions.ED,true)} />
+            return<CreateIcon variant="contained" color="primary" onClick={()=>fromAction(rowData.data,FromActions.ED)} />
         }
       },
       {
         title: "",
         width:8,
         render: (rowData)=> {
-            return <DeleteOutlineIcon variant="contained" color="secondary" onClick={()=>deleteMethod(rowData.data)} />
+            return <DeleteOutlineIcon variant="contained" color="secondary" onClick={()=>fromAction(rowData.data,FromActions.DE)} />
         }
       }  
     ];
@@ -45,17 +45,17 @@ const HotelTabel=(props)=>{
   });
     
   return <MaterialTable
-    title="Store Managment"
+    title="Hotel Tables Managment"
     columns={columns}
     data={(data && data.length > 0) ? data : []}
     options={{
       headerStyle: { backgroundColor: '#01579b', color: '#FFF' }
     }}
     actions={[
-      { icon: () => <div><Button variant="contained" color="primary">Create Table</Button></div>,
+      { icon: () => <div><Button variant="contained" color="primary">Add Table</Button></div>,
         onClick: (event, rowData) => { fromAction(null, FromActions.CR); },
         isFreeAction: true,
-        tooltip: 'Create Table'
+        tooltip: 'Add Table'
       }
     ]}
   />

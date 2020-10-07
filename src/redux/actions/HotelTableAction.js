@@ -31,7 +31,7 @@ const saveHotelTableRecord=(hotelTableData,authrizationKey)=>{
 const updateHotelTableRecord=(hotelTableData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .put('/table/save/'+hotelTableData.hotel_id,hotelTableData,{
+            .put('/table/update/'+hotelTableData.table_id,hotelTableData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
@@ -42,10 +42,10 @@ const updateHotelTableRecord=(hotelTableData,authrizationKey)=>{
     }
 }
 
-const deleteHotelTableRecord=(storeItemData,authrizationKey)=>{
+const deleteHotelTableRecord=(hotelTableData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .delete('/table/save/'+storeItemData.store_id,{
+            .delete('/table/delete/'+hotelTableData.table_id,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
