@@ -3,6 +3,7 @@ import HotelTabel from './HotelTable';
 import HotelTabelFrom from './TableFrom';
 import Loader from '../utilites/Loader';
 import * as HotelTableAction from '../../redux/actions/HotelTableAction';
+import * as MainOrdersAction from '../../redux/actions/MainOrdersAction';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
@@ -58,6 +59,7 @@ class TableManagement extends Component {
         const { data, setLoading, operation}=props
         const { authrizations }= this.props.LoginState
         const { getListOfHotelTable, saveHotelTableRecord, updateHotelTableRecord, deleteHotelTableRecord}=this.props.HotelTableAction
+        const { getFreeTableList }=this.props.MainOrdersAction
         await setLoading(true);
         if(operation === FromActions.CR){
             await saveHotelTableRecord(data, authrizations);
@@ -68,6 +70,7 @@ class TableManagement extends Component {
         }
         setTimeout(async()=>{
             await getListOfHotelTable(authrizations);
+            await getFreeTableList(authrizations);
             await setLoading(false);
             await this.handelFromAction();
         },API_EXE_TIME)
@@ -76,6 +79,7 @@ class TableManagement extends Component {
 
 const mapStateToProps=state=>{return state}
 const mapDispatchToProps=dispatch=>({
-    HotelTableAction: bindActionCreators(HotelTableAction, dispatch)
+    HotelTableAction: bindActionCreators(HotelTableAction, dispatch),
+    MainOrdersAction: bindActionCreators(MainOrdersAction, dispatch)
 })
 export default connect(mapStateToProps,mapDispatchToProps)(TableManagement);

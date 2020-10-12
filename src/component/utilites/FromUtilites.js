@@ -65,11 +65,26 @@ const capitalizeFirstLatter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
 
+// this is render text filed
+const renderHiddenField = ({ label, name, input, meta: { touched, invalid, error }, ...custom }) => (
+    <inputs
+      id={name}
+      label={label}
+      type="hidden"
+      placeholder={label}
+      error={touched && invalid}
+      helperText={touched && error}
+      {...input}
+      {...custom}
+    />
+  )
+  
 
 export{
     renderTextFiled,
     renderFromTextFiled,
     renderMATextField,
     renderPaperTextFiled,
-    capitalizeFirstLatter
+    capitalizeFirstLatter,
+    renderHiddenField
 }
