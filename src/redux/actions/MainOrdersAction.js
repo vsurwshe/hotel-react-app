@@ -42,6 +42,62 @@ const createBookTabelRecord=(tabelRecord, authrizationKey)=>{
     }
 }
 
+const createOrderTabelRecord=(orderRecord, authrizationKey)=>{
+    return (dispatch)=>{
+        return CreateInstance()
+        .post('/orders/food/save', orderRecord,{
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization": "Bearer "+authrizationKey
+            }
+        })
+        .then(response => dispatch(saveOrderTabelRecord(response.data && response.data.data)) )
+        .catch(error => console.log("Error ", error))
+    }
+}
+
+const getOrderFoodListByTableId=(bookedTableId,authrizationKey)=>{
+    return (dispatch)=>{
+        return CreateInstance()
+        .get('/orders/food/list/'+bookedTableId,{
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization": "Bearer "+authrizationKey
+            }
+        })
+        .then(response => dispatch(saveOrderFoodListByTableId(response.data && response.data.data)) )
+        .catch(error => console.log("Error ", error))
+    }
+}
+
+const updateOrderFood=(foodData,authrizationKey)=>{
+    return (dispatch)=>{
+        return CreateInstance()
+        .put('/orders/food/update/'+foodData.order_food_id,foodData,{
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization": "Bearer "+authrizationKey
+            }
+        })
+        .then(response => dispatch(saveOrderFoodRecord(response.data && response.data.data)) )
+        .catch(error => console.log("Error ", error))
+    }
+}
+
+const deleteOrderFood=(foodId,authrizationKey)=>{
+    return (dispatch)=>{
+        return CreateInstance()
+        .delete('/orders/food/delete/'+foodId,{
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization": "Bearer "+authrizationKey
+            }
+        })
+        .then(response => dispatch(saveDeleteFoodRecord(response.data && response.data.data)) )
+        .catch(error => console.log("Error ", error))
+    }
+}
+
 //------------------------
 export function saveBookTableList(tableData){
     return{
@@ -64,9 +120,40 @@ export function saveBookTabelRecord(tabelData) {
     }
 }
 
+export function saveOrderTabelRecord(orderData) {
+    return {
+        type:"SAVE_ORDER_TABEL_RECORD",
+        orderData
+    }
+}
+
+export function saveOrderFoodListByTableId(foodData) {
+    return{
+        type:"SAVE_ORDER_FOOD_LIST_BY_TABEL_ID",
+        foodData
+    }
+}
+
+export function saveOrderFoodRecord(foodData) {
+    return {
+        type:"SAVE_UPDATE_ORDER_FOOD_RECORD",
+        foodData
+    }
+}
+
+export function saveDeleteFoodRecord(foodData) {
+    return {
+        type:"SAVE_DELETE_ORDER_FOOD_RECORD",
+        foodData
+    }
+}
 
 export{
     getBookTableList,
     getFreeTableList,
-    createBookTabelRecord
+    createBookTabelRecord,
+    createOrderTabelRecord,
+    getOrderFoodListByTableId,
+    updateOrderFood,
+    deleteOrderFood
 }

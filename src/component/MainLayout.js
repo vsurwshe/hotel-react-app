@@ -61,15 +61,14 @@ const LoadNav = (props) => {
   return <>
   <div className="sidebar" data-color="white" data-active-color="danger">
   <div className="logo">
-    <a href="/" className="simple-text logo-mini"> <div className="logo-image-small"> <img src="img/logo-small.png" /> </div>
-    </a>
+    <a href="/" className="simple-text logo-mini"> <div className="logo-image-small"> <img src="img/logo-small.png" alt="adminImage" /> </div> </a>
     <a href="/" className="simple-text logo-normal">Admin</a>
   </div>
   <div className="sidebar-wrapper">
     <ul className="nav">
       {Routes.map((item, key) => LoadSingleLink(item, key))}
       {CallLogOut({ handleClickOpen, open, handleClose, mainProps: props })}
-      <li> <a onClick={handleClickOpen} > <i className="nc-icon nc-button-power" /> Sing Out </a> </li>
+      <li> <a onClick={handleClickOpen} ><i className="nc-icon nc-button-power" /> Sing Out </a> </li>
     </ul>
   </div>
 </div>

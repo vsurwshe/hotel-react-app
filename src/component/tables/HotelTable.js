@@ -9,7 +9,7 @@ import { Button } from '@material-ui/core';
 
 
 const HotelTabel=(props)=>{
-  const { fromAction, deleteMethod }=props
+  const { fromAction }=props
   const { listOfHotelTable }=props.HotelTableState
   const columns = [
       { title: 'Sr.\u00a0No.', field: 'key', width: 20 },

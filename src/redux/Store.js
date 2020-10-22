@@ -49,16 +49,9 @@ const enhancer= compose(applyMiddleware(thunk, logger));
   
 // this is common action through out application will be used
 const initialState = reducer({},{},{})
-const initialState1= reducer({
-  form: {}, // mounted under "form"
-  LoginState:{},
-  StoreState:{},
-  HotelTableState:{},
-})
-
 const rootReducer = (state, action) => {
   if (action.type === 'CLEAR_DATA') {
-    state = initialState1
+    state = initialState
   }
   return reducer(state, action)
 }

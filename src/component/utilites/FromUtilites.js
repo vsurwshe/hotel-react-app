@@ -7,7 +7,7 @@ const renderTextFiled=({type, name, placeholder, dataValidate, input, meta: { to
             className="input100" 
             type={type} 
             name={name} 
-            error={touched && invalid}
+            error={touched ? invalid : undefined}
             placeholder={placeholder} 
             {...input}
             {...custom}
@@ -59,6 +59,15 @@ const renderPaperTextFiled=({ label, name, input, placeholder, helperText, type,
         />
     </div>
 )
+
+const renderSelectFileds=({ label, name, input, placeholder, helperText, type, meta: { touched, invalid, error }, ...custom })=>(
+    <select id={name} name={name} form="carform">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="opel">Opel</option>
+    <option value="audi">Audi</option>
+    </select>
+)
     
 const capitalizeFirstLatter = (string) => {
     if (typeof string !== 'string') return ''
@@ -86,5 +95,6 @@ export{
     renderMATextField,
     renderPaperTextFiled,
     capitalizeFirstLatter,
-    renderHiddenField
+    renderHiddenField,
+    renderSelectFileds
 }
