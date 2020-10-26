@@ -42,6 +42,20 @@ const createBookTabelRecord=(tabelRecord, authrizationKey)=>{
     }
 }
 
+const deleteBookTabelRecord=(tabelRecordId, authrizationKey)=>{
+    return (dispatch)=>{
+        return CreateInstance()
+        .delete('/orders/table/delete/'+tabelRecordId,{
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization": "Bearer "+authrizationKey
+            }
+        })
+        .then(response => dispatch(saveDeleteBookTabelRecord(response.data && response.data.data)) )
+        .catch(error => console.log("Error ", error))
+    }
+}
+
 const createOrderTabelRecord=(orderRecord, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
@@ -120,6 +134,13 @@ export function saveBookTabelRecord(tabelData) {
     }
 }
 
+export function saveDeleteBookTabelRecord(tabelData) {
+    return {
+        type:"SAVE_DELTE_BOOK_TABEL_RECORD",
+        tabelData
+    }
+}
+
 export function saveOrderTabelRecord(orderData) {
     return {
         type:"SAVE_ORDER_TABEL_RECORD",
@@ -155,5 +176,6 @@ export{
     createOrderTabelRecord,
     getOrderFoodListByTableId,
     updateOrderFood,
-    deleteOrderFood
+    deleteOrderFood,
+    deleteBookTabelRecord
 }

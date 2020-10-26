@@ -7,7 +7,7 @@ import * as HotelTableAction from '../../redux/actions/HotelTableAction'
 import * as OrderAction from '../../redux/actions/MainOrdersAction'
 import * as StoreAction from '../../redux/actions/StoreAction'
 import "./css/Grid.css";
-import { BookTabelForm, OrderFoodTabel } from './OrdersFroms';
+import { BookTabelForm, OrderFoodTabel, MainOrderFoodTabel } from './OrdersFroms';
 
 class OrdersManagement extends Component {
     state = {  
@@ -42,13 +42,15 @@ class OrdersManagement extends Component {
     }
     
     loadGrid=()=>{
-        return <Grid container spacing={5}>
-            <Grid item xs={12} sm={6} >
-                <Grid item> { this.loadFreeTables()}  </Grid>
-                <Grid item style={{marginTop:10}}>{ this.loadBookedTables()}</Grid>
+        return <>
+            <Grid container spacing={5}>
+                <Grid item xs={12} sm={6} >
+                    <Grid item> {this.loadFreeTables()} </Grid>
+                    <Grid item style={{marginTop:10}}>{this.loadBookedTables()}   </Grid>
+                </Grid>
+                <Grid item xs={12} sm={6} > {this.loadMainOrderTabel()} </Grid>
             </Grid>
-            <Grid item xs={12} sm={6} > {this.loadMainOrderTabel()} </Grid>
-        </Grid>
+        </>
     }
 
     loadFreeTables=()=>{
@@ -97,6 +99,7 @@ class OrdersManagement extends Component {
                     cancel={this.handelBookTable} 
                     initialValues={bookTabelData}
                     SaveMethod={this.callBookTabelApi}
+                    action={FromActions.CR}
                 /> 
             </DialogContent>
         </Dialog>
@@ -146,43 +149,53 @@ class OrdersManagement extends Component {
                     <label>Customer Size: {orderTableData && orderTableData.booked_tabel_customer_size}</label>
                  </div>
                 <OrderFoodTabel  mainProps={this.props} tableData={orderTableData} columns={columns} SaveMethod={this.callSaveFoodApi}  />
-                <center>
-                    <Button type="button" variant="outlined" color="secondary" onClick={() => this.handelOrder() }> Cancel</Button>&nbsp;&nbsp;
-                </center>
+                <div style={{float:"right", marginTop:10}}>
+                    <Button type="button" variant="outlined" color="primary" onClick={() => this.callBookTabelApi({data: orderTableData, action:FromActions.DE}) }> Free table </Button>&nbsp;&nbsp;
+                    <Button type="button" variant="outlined" color="secondary" onClick={() => this.handelOrder() }> Cancel</Button>
+                </div>
             </DialogContent>
         </Dialog>
     }
 
     loadMainOrderTabel=()=>{
-        return <Card>
-            <CardHeader  title="Order tables" />
-            <CardContent className="grid">
-            </CardContent>
-        </Card>
+        const { orderFoodList }=this.props.MainOrdersState
+        const columns = [
+            { title: 'Sr.no', field: 'key',width:10},
+            { title: 'Table\u00a0Name', field: 'table_name'},
+            { title: 'Table\u00a0Order\u00a0Count', field: 'table_food_count',width:10},
+        ];
+        let tabelData = (orderFoodList && orderFoodList.length >0)&& orderFoodList.map((item,key)=>{ return {data:item.food_list, "key":key+1, "table_food_count":item.food_count , "table_name": item.table && item.table.booked_tabel_name}})
+        return <MainOrderFoodTabel columns={columns} data={tabelData} />
     }
 
     callBookTabelApi=async(props)=>{
-        const { data, setLoading }=props
+        const { data, setLoading, action }=props
         const { authrizations }=this.props.LoginState
-        const { getBookTableList, getFreeTableList, createBookTabelRecord }=this.props.OrderAction
-        let newBookTabelData={
-            ...data,
-            "booked_tabel_name": data.table_name,
-            "booked_tabel_customer_size": data.table_customer_size
+        const { getBookTableList, getFreeTableList, createBookTabelRecord, deleteBookTabelRecord }=this.props.OrderAction
+        if(action === FromActions.CR){
+            let newBookTabelData={
+                ...data,
+                "booked_tabel_name": data.table_name,
+                "booked_tabel_customer_size": data.table_customer_size
+            }
+            await setLoading(true);
+            await createBookTabelRecord(newBookTabelData, authrizations);
+        }else if(action === FromActions.DE){
+            console.log("Data ", data)
+            await deleteBookTabelRecord(data.table_id , authrizations)
         }
-        await setLoading(true);
-        await createBookTabelRecord(newBookTabelData, authrizations);
         setTimeout(async()=>{
             await getBookTableList(authrizations);
             await getFreeTableList(authrizations);
-            await setLoading(false);
-            await this.handelBookTable();
+            setLoading && await setLoading(false);
+            (action === FromActions.CR) && await this.handelBookTable();
+            (action === FromActions.DE) && await this.handelOrder();
         },API_EXE_TIME)
     }
 
     callSaveFoodApi=async(propsData)=>{
         const { data, resolve, tableData, action }=propsData
-        const { createOrderTabelRecord, getOrderFoodListByTableId, updateOrderFood, deleteOrderFood }= this.props.OrderAction
+        const { getBookTableList, createOrderTabelRecord, getOrderFoodListByTableId, updateOrderFood, deleteOrderFood }= this.props.OrderAction
         const { authrizations }=this.props.LoginState
         if(action === FromActions.CR){
             let newDataPost={
@@ -204,75 +217,12 @@ class OrdersManagement extends Component {
             await deleteOrderFood(data.order_food_id, authrizations);
         }
         setTimeout(async()=>{
+            await getBookTableList(authrizations);
             await getOrderFoodListByTableId(tableData.booked_tabel_id, authrizations);
             resolve();
         }, API_EXE_TIME)
     }
 }
-
-// const OrderFoodTabel=(props)=>{
-//     const { columns, SaveMethod, tableData}=props
-//     const { authrizations }=props.mainProps.LoginState
-//     const { getOrderFoodListByTableId }=props.mainProps.OrderAction
-//     const { bookedTabelFoodList }=props.mainProps.MainOrdersState
-//     const [loadList, setLoadList] = useState(false);
-//     useEffect(() => {
-//         loadInitalData();
-//     }, [])
-
-//     const loadInitalData=async()=>{
-//         await  setLoadList(true);
-//         await getOrderFoodListByTableId(tableData.booked_tabel_id, authrizations);
-//         await setLoadList(false);
-//     }
-//     return <>
-//     {loadList ? <Loader  message="Loading food tabel list" size={50}/> :
-//     <MaterialTable
-//         title=""
-//         columns={columns}
-//         data={(bookedTabelFoodList && bookedTabelFoodList.length > 0) ? bookedTabelFoodList : []}
-//         options={{
-//           headerStyle: { backgroundColor: '#01579b', color: '#FFF' },
-//           search: false,
-//           actionsColumnIndex: -1
-//         }} 
-//         icons={{Add: () => <Button variant="contained" color="primary">Add Food</Button> }}
-//         editable={{
-//             isEditable: rowData => true, 
-//             isEditHidden: rowData => false,
-//             isDeletable: rowData => true,
-//             isDeleteHidden: rowData => false,
-//             onRowAdd: newData =>{
-//                 return new Promise(async(resolve, reject) => {
-//                     if(newData){
-//                         SaveMethod({data:newData, resolve, tableData, action:FromActions.CR})
-//                     }else{
-//                         reject();
-//                     }
-//                 }
-//             )},
-//             onRowUpdate: (newData, oldData) =>{
-//               return new Promise(async(resolve, reject) => {
-//                 if(newData){
-//                     SaveMethod({data:newData, resolve, tableData, action:FromActions.ED})
-//                 }else{
-//                   reject();
-//                 }
-//               })
-//             },
-//             onRowDelete: oldData =>{
-//               return new Promise(async(resolve, reject) => {
-//                     if(oldData){
-//                         SaveMethod({data:oldData, resolve, tableData, action:FromActions.DE})
-//                     }else{
-//                         reject();
-//                     }
-//                })
-//             }
-//           }}
-//   />}
-//   </>
-// }
  
 const mapStateToProps=state=>{return state}
 const mapDispatchToProps=dispatch=>({

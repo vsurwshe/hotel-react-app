@@ -5,12 +5,14 @@ import { renderFromTextFiled, renderHiddenField } from '../utilites/FromUtilites
 import Loader from '../utilites/Loader';
 import MaterialTable from 'material-table';
 import { FromActions } from '../../assets/config/Config';
+import "./css/table.css"
 
+// this method will load the booking hotel tabel form
 let BookTabelForm = (props) => {
-    const { SaveMethod, reset, handleSubmit, operation, cancel } = props
+    const { SaveMethod, reset, handleSubmit, operation, cancel, action } = props
     const [loading, setLoading] = useState(false);
     return <>
-        <form onSubmit={handleSubmit(values => SaveMethod({ data: values, setLoading, operation }))}>
+        <form onSubmit={handleSubmit(values => SaveMethod({ data: values, setLoading, operation, action }))}>
             <div className="row">
                 <Field name="table_id" component={renderHiddenField} type="text" />
                 <Field name="table_name" component={renderFromTextFiled} placeholder="Enter table name" label="Table Name" type="text" />
@@ -28,6 +30,7 @@ let BookTabelForm = (props) => {
 const afterSubmit = (result, dispatch) => dispatch(reset('BookTabelFrom'));
 BookTabelForm = reduxForm({ form: "BookTabelFrom", onSubmitSuccess: afterSubmit, enableReinitialize: true })(BookTabelForm);
 
+// this method will load the order food tabel by booking tabel
 const OrderFoodTabel = (props) => {
     const { columns, SaveMethod, tableData } = props
     const { authrizations } = props.mainProps.LoginState
@@ -35,7 +38,6 @@ const OrderFoodTabel = (props) => {
     const { bookedTabelFoodList } = props.mainProps.MainOrdersState
     const [loadList, setLoadList] = useState(false);
     useEffect(() => { loadInitalData() }, [])
-
     const loadInitalData = async () => {
         await setLoadList(true);
         await getOrderFoodListByTableId(tableData.booked_tabel_id, authrizations);
@@ -91,7 +93,46 @@ const OrderFoodTabel = (props) => {
     </>
 }
 
+// this method load the main order table
+const MainOrderFoodTabel = (props) => {
+    const { columns, data } = props
+    return<div style={{ maxWidth: "100%" }}>
+        <MaterialTable
+            title="Order list by tables"
+            columns={columns}
+            data={(data && data.length > 0) ? data : []}
+            options={{
+                headerStyle: { backgroundColor: '#01579b', color: '#FFF' },
+                actionsColumnIndex: -1,
+                pageSize:7
+            }}
+            detailPanel={rowData => {
+                const { data }=rowData
+                let totalAomount=0;
+                return <table border="1">
+                    <tbody>
+                        {(data && data.length >0) ? data.map((item,key)=>{
+                            totalAomount=totalAomount+ parseFloat(item.order_food_total_price);
+                            return <tr key={key}>
+                                <td>{item.order_food_name}</td>
+                                <td>{item.order_food_qty} X {item.order_food_unit_price} </td>
+                                <td>{item.order_food_total_price}</td>
+                            </tr>
+                        }):"No Order Food"}
+                         {(data && data.length >0) && <tr>
+                             <td colSpan={2}><b>Total :</b></td>
+                             <td>{totalAomount}</td>   
+                        </tr>}
+                    </tbody>
+                </table>
+            }}
+            onRowClick={(event, rowData, togglePanel) => togglePanel()}
+        />
+    </div>
+}
+
 export {
     BookTabelForm,
-    OrderFoodTabel
+    OrderFoodTabel,
+    MainOrderFoodTabel
 }
