@@ -57,12 +57,12 @@ const LoadNav = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => { setOpen(true); };
   const handleClose = () => { setOpen(false); };
-
+  const { userDetails }=props.LoginState
   return <>
   <div className="sidebar" data-color="white" data-active-color="danger">
   <div className="logo">
     <a href="/" className="simple-text logo-mini"> <div className="logo-image-small"> <img src="img/logo-small.png" alt="adminImage" /> </div> </a>
-    <a href="/" className="simple-text logo-normal">Admin</a>
+    <a href="/" className="simple-text logo-normal">Welcome {(userDetails && userDetails.name !=="")? userDetails.name :"Admin"}</a>
   </div>
   <div className="sidebar-wrapper">
     <ul className="nav">
