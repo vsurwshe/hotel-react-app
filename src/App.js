@@ -1,7 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import Login from './component/login/Login';
+import MainLayout from './component/MainLayout';
 
-const App=()=>{
-  return <h1>App</h1>
+const App=(props)=>{
+  const {authrizations }=props.LoginState
+  return (authrizations && authrizations !=="") ? <MainLayout />: <Login />
 }
 
-export default App;
+const mapStateToProps=state=>{return state}
+export default connect(mapStateToProps)(App);
