@@ -6,8 +6,10 @@ import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
 import * as HotelTableAction from '../../redux/actions/HotelTableAction'
 import * as OrderAction from '../../redux/actions/MainOrdersAction'
 import * as StoreAction from '../../redux/actions/StoreAction'
+import * as InvoiceAction from '../../redux/actions/InvoiceAction'
 import "./css/Grid.css";
 import { BookTabelForm, OrderFoodTabel, MainOrderFoodTabel } from './OrdersFroms';
+import Loader from '../utilites/Loader';
 
 class OrdersManagement extends Component {
     state = {  
@@ -22,12 +24,15 @@ class OrdersManagement extends Component {
         const { authrizations }=this.props.LoginState
         const { listOfBookedTabels, listOfFreeTabels }=this.props.MainOrdersState
         const { listOfStoreItem }=this.props.StoreState
+        const { listOfInvoice }=this.props.InvoiceState
         const { getBookTableList, getFreeTableList }=this.props.OrderAction
         const { GetListOfStoreItem }= this.props.StoreAction
+        const { getListOfInvoice }= this.props.InvoiceAction
         await this.handelHotelOrders();
         (listOfFreeTabels && listOfFreeTabels.length <=0) && await getFreeTableList(authrizations);
         (listOfBookedTabels && listOfBookedTabels.length <=0) && await getBookTableList(authrizations);
         (listOfStoreItem && listOfStoreItem.length <=0) && await GetListOfStoreItem(authrizations);
+        (listOfInvoice && listOfInvoice.length <=0) && await getListOfInvoice(authrizations);
         await this.handelHotelOrders();
     }
 
@@ -38,7 +43,8 @@ class OrdersManagement extends Component {
     handelOrder=(orderTableData)=>{  this.setState({ orderVaule : !this.state.orderVaule, orderTableData}) }
 
     render() { 
-        return this.loadGrid();
+        const { loadHotelOrders }=this.state
+        return loadHotelOrders ? <Loader message="Loading..." size={50} /> : this.loadGrid();
     }
     
     loadGrid=()=>{
@@ -226,8 +232,10 @@ class OrdersManagement extends Component {
  
 const mapStateToProps=state=>{return state}
 const mapDispatchToProps=dispatch=>({
+    dispatch,
     HotelTableAction: bindActionCreators(HotelTableAction, dispatch),
     OrderAction: bindActionCreators(OrderAction, dispatch),
-    StoreAction: bindActionCreators(StoreAction, dispatch)
+    StoreAction: bindActionCreators(StoreAction, dispatch),
+    InvoiceAction: bindActionCreators(InvoiceAction,dispatch)
 });
 export default connect(mapStateToProps,mapDispatchToProps)(OrdersManagement);

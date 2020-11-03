@@ -6,6 +6,7 @@ import LoginState from '../redux/reducers/LoginState';
 import StoreState from '../redux/reducers/StoreState';
 import HotelTableState from '../redux/reducers/HotelTableState';
 import MainOrdersState from '../redux/reducers/MainOrdersState';
+import InvoiceState from '../redux/reducers/InvoiceState';
 // this function save state into local storage.
 const saveToLocalStorage=(state)=>{
     try{
@@ -41,7 +42,8 @@ const reducer = combineReducers({
   LoginState,
   StoreState,
   HotelTableState,
-  MainOrdersState
+  MainOrdersState,
+  InvoiceState
 });
   
 // this functions apply logger funtionality during development mode 

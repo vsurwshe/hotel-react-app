@@ -1,11 +1,11 @@
 import Dashboard from '../dashboard/Dashboard';
 import OrdersManagement from '../orders/OrdersManagement';
-import UsersManagement from '../users/UsersManagement';
 import StoreManagement from '../store/StoreManagement';
 import TablesManagement from '../tables/TablesManagement';
 import ProductsManagement from '../products/ProductsManagement';
 import ProfileManagement from '../profile/ProfileManagement'
 import Settings from '../settings/Settings'
+import InvoiceManagement from '../InvoiceManagement/InvoiceManagement';
 
 
 export default [
@@ -23,9 +23,9 @@ export default [
     },
     {
         icon:"nc-icon nc-single-02",
-        name:"Users",
-        path:"/users",
-        component:UsersManagement
+        name:"Invoice",
+        path:"/invoice",
+        component:InvoiceManagement
     },
     {
         icon:"nc-icon nc-shop",
