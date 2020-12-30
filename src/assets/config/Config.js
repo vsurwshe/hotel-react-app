@@ -20,7 +20,7 @@ const HeaderConfig=(authrizationKey)=>{
   return {
     headers:{
       "Content-Type":"application/json",
-      "Authorization": "Bearer "+authrizationKey
+      "Authorization": authrizationKey
     }
   }
 }

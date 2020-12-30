@@ -12,10 +12,10 @@ const StoreTable=(props)=>{
   const { listOfStoreItem }=props.StoreState
   const columns = [
       { title: 'Sr.\u00a0No.', field: 'key', width: 20 },
-      { title: 'Product\u00a0Name', field: 'product_name' },
-      { title: 'Product\u00a0Quantity', field: 'product_qty' },
-      { title: 'Product\u00a0Per\u00a0Unit\u00a0Price', field: 'product_unit_price', width: 20 },
-      { title: 'Product\u00a0Total\u00a0Price', field: 'product_total_price', width: 20 },
+      { title: 'Product\u00a0Name', field: 'store_product_name' },
+      { title: 'Product\u00a0Quantity', field: 'store_product_qty' },
+      // { title: 'Product\u00a0Per\u00a0Unit\u00a0Price', field: 'product_unit_price', width: 20 },
+      { title: 'Product\u00a0Total\u00a0Price', field: 'store_product_total_price', width: 20 },
       {
         title: "",
         width:8,

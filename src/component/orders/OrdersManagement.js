@@ -156,6 +156,7 @@ class OrdersManagement extends Component {
                  </div>
                 <OrderFoodTabel  mainProps={this.props} tableData={orderTableData} columns={columns} SaveMethod={this.callSaveFoodApi}  />
                 <div style={{float:"right", marginTop:10}}>
+                    <Button type="button" variant="outlined" color="primary" onClick={() => this.callSaveInvoiceApi({data: orderTableData, action:FromActions.DE}) }> Make Invoice </Button>&nbsp;&nbsp;
                     <Button type="button" variant="outlined" color="primary" onClick={() => this.callBookTabelApi({data: orderTableData, action:FromActions.DE}) }> Free table </Button>&nbsp;&nbsp;
                     <Button type="button" variant="outlined" color="secondary" onClick={() => this.handelOrder() }> Cancel</Button>
                 </div>
@@ -187,7 +188,6 @@ class OrdersManagement extends Component {
             await setLoading(true);
             await createBookTabelRecord(newBookTabelData, authrizations);
         }else if(action === FromActions.DE){
-            console.log("Data ", data)
             await deleteBookTabelRecord(data.table_id , authrizations)
         }
         setTimeout(async()=>{
@@ -227,6 +227,11 @@ class OrdersManagement extends Component {
             await getOrderFoodListByTableId(tableData.booked_tabel_id, authrizations);
             resolve();
         }, API_EXE_TIME)
+    }
+
+    callSaveInvoiceApi=(propsData)=>{
+        const { data, resolve, tableData, action }=propsData
+        console.log("Data ",data)
     }
 }
  

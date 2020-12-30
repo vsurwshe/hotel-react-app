@@ -31,18 +31,18 @@ const LoadFileds=()=>{
     return <>
         <div className="row">
             <div className="col-md-6 pr-1">
-                <Field name="product_name" component={renderFromTextFiled} placeholder="Enter product name" label="Product name" type="text" />
+                <Field name="store_product_name" component={renderFromTextFiled} placeholder="Enter product name" label="Product name" type="text" />
             </div>
             <div className="col-md-6 px-1">
-                <Field name="product_qty" component={renderFromTextFiled} placeholder="Enter product quantity" label="Product quantity" type="text" />
+                <Field name="store_product_qty" component={renderFromTextFiled} placeholder="Enter product quantity" label="Product quantity" type="text" />
             </div>
         </div>
         <div className="row">
-            <div className="col-md-6 pr-1">
+            {/* <div className="col-md-6 pr-1">
                 <Field name="product_unit_price" component={renderFromTextFiled}  placeholder="Enter product per unit price" label="Product per unit price" type="text" />
-            </div>
+            </div> */}
             <div className="col-md-6 px-1">
-                <Field name="product_total_price" component={renderFromTextFiled}  placeholder="Enter total product price" label="Total product price" type="text" />
+                <Field name="store_product_total_price" component={renderFromTextFiled}  placeholder="Enter total product price" label="Total product price" type="text" />
             </div>
         </div>
     </>

@@ -3,7 +3,7 @@ import { CreateInstance } from '../../assets/config/Config'
 const GetListOfStoreItem=(authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .get('/store/list',{
+            .get('/api/store/getAllStoreProduct',{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
@@ -17,7 +17,7 @@ const GetListOfStoreItem=(authrizationKey)=>{
 const saveStoreItemRecord=(storeItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .post('/store/save',storeItemData,{
+            .post('/api/store/saveStoreProduct',storeItemData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
@@ -31,7 +31,7 @@ const saveStoreItemRecord=(storeItemData,authrizationKey)=>{
 const updateStoreItemRecord=(storeItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .put('/store/update/'+storeItemData.store_id,storeItemData,{
+            .put('/api/store/updateStoreProduct/'+storeItemData.store_id,storeItemData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
@@ -45,7 +45,7 @@ const updateStoreItemRecord=(storeItemData,authrizationKey)=>{
 const deleteStoreItemRecord=(storeItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .delete('/store/delete/'+storeItemData.store_id,{
+            .delete('/api/store/deleteStoreProduct/'+storeItemData.store_id,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey

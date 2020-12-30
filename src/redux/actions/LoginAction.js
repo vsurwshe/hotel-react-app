@@ -3,7 +3,7 @@ import { CreateInstance } from '../../assets/config/Config'
 const GetLogin=(loginData)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .post('/auth/login',loginData,{
+            .post('/api/login',loginData,{
                 headers:{
                     "Content-Type":"application/json"
                 }
