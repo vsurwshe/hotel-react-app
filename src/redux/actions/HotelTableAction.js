@@ -3,7 +3,7 @@ import { CreateInstance } from '../../assets/config/Config'
 const getListOfHotelTable=(authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .get('/table/list',{
+            .get('/api/hotelTable/list',{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
@@ -17,7 +17,7 @@ const getListOfHotelTable=(authrizationKey)=>{
 const saveHotelTableRecord=(hotelTableData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .post('/table/save',hotelTableData,{
+            .post('/api/hotelTable/save',hotelTableData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
@@ -31,7 +31,7 @@ const saveHotelTableRecord=(hotelTableData,authrizationKey)=>{
 const updateHotelTableRecord=(hotelTableData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .put('/table/update/'+hotelTableData.table_id,hotelTableData,{
+            .put('/api/hotelTable/update/'+hotelTableData.table_id,hotelTableData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
@@ -45,7 +45,7 @@ const updateHotelTableRecord=(hotelTableData,authrizationKey)=>{
 const deleteHotelTableRecord=(hotelTableData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .delete('/table/delete/'+hotelTableData.table_id,{
+            .delete('/api/hotelTable/delete/'+hotelTableData.table_id,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
