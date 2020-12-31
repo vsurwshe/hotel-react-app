@@ -7,6 +7,7 @@ import * as HotelTableAction from '../../redux/actions/HotelTableAction'
 import * as OrderAction from '../../redux/actions/MainOrdersAction'
 import * as StoreAction from '../../redux/actions/StoreAction'
 import * as InvoiceAction from '../../redux/actions/InvoiceAction'
+import * as FoodAction from '../../redux/actions/FoodAction'
 import "./css/Grid.css";
 import { BookTabelForm, OrderFoodTabel, MainOrderFoodTabel } from './OrdersFroms';
 import Loader from '../utilites/Loader';
@@ -23,15 +24,15 @@ class OrdersManagement extends Component {
     componentDidMount=async()=>{
         const { authrizations }=this.props.LoginState
         const { listOfBookedTabels, listOfFreeTabels }=this.props.MainOrdersState
-        const { listOfStoreItem }=this.props.StoreState
+        const { listOfFoodsItem }=this.props.FoodState
         const { listOfInvoice }=this.props.InvoiceState
         const { getBookTableList, getFreeTableList }=this.props.OrderAction
-        const { GetListOfStoreItem }= this.props.StoreAction
+        const { GetListOfFoodItem }= this.props.FoodAction
         const { getListOfInvoice }= this.props.InvoiceAction
         await this.handelHotelOrders();
         (listOfFreeTabels && listOfFreeTabels.length <=0) && await getFreeTableList(authrizations);
         (listOfBookedTabels && listOfBookedTabels.length <=0) && await getBookTableList(authrizations);
-        (listOfStoreItem && listOfStoreItem.length <=0) && await GetListOfStoreItem(authrizations);
+        (listOfFoodsItem && listOfFoodsItem.length <=0) && await GetListOfFoodItem(authrizations);
         (listOfInvoice && listOfInvoice.length <=0) && await getListOfInvoice(authrizations);
         await this.handelHotelOrders();
     }
@@ -113,7 +114,7 @@ class OrdersManagement extends Component {
 
     addOrder=()=>{
         const { orderVaule, orderTableData }=this.state
-        const { listOfStoreItem }=this.props.StoreState
+        const { listOfFoodsItem }=this.props.FoodState
           // creating columns
         const columns = [
           { title: 'Name', 
@@ -122,13 +123,13 @@ class OrdersManagement extends Component {
                 const { order_food_name }=props.rowData
                 return <select id="order_food_name" value={order_food_name} onChange={(event) =>{
                         var data = { ...props.rowData };
-                        let filterRecord=(listOfStoreItem && listOfStoreItem.length >0) && listOfStoreItem.filter((item)=> item.product_name === event.target.value)    
+                        let filterRecord=(listOfFoodsItem && listOfFoodsItem.length >0) && listOfFoodsItem.filter((item)=> item.food_name === event.target.value)    
                         data.order_food_name= event.target.value;
-                        data.order_food_unit_price= (filterRecord && filterRecord.length >0 ) ? filterRecord[0].product_unit_price :""
+                        data.order_food_unit_price= (filterRecord && filterRecord.length >0 ) ? filterRecord[0].food_price :""
                         props.onRowDataChange(data);
                     }}>
                     <option value="">Select Food Name</option>
-                    { (listOfStoreItem && listOfStoreItem.length >0) && listOfStoreItem.map((item,key)=><option key={key} value={item.product_name}>{item.product_name}</option>)}
+                    { (listOfFoodsItem && listOfFoodsItem.length >0) && listOfFoodsItem.map((item,key)=><option key={key} value={item.food_name}>{item.food_name}</option>)}
                 </select>
             } 
           },
@@ -138,8 +139,8 @@ class OrdersManagement extends Component {
                 const { order_food_name, order_food_qty }=props.rowData
                 return  <input style={{width:"100%", backgroundColor:"skyblue"}} id="order_food_qty" value={order_food_qty} onChange={(event) => {
                     var data = { ...props.rowData };
-                    let filterRecord=(listOfStoreItem && listOfStoreItem.length >0) && listOfStoreItem.filter((item)=> item.product_name === order_food_name);
-                    let netPrice= (filterRecord && filterRecord.length >0  && event.target.value ) && filterRecord[0].product_unit_price * event.target.value;
+                    let filterRecord=(listOfFoodsItem && listOfFoodsItem.length >0) && listOfFoodsItem.filter((item)=> item.food_name === order_food_name);
+                    let netPrice= (filterRecord && filterRecord.length >0  && event.target.value ) && filterRecord[0].food_price * event.target.value;
                     data.order_food_qty= event.target.value;
                     data.order_food_total_price= netPrice;
                     props.onRowDataChange(data);
@@ -224,7 +225,7 @@ class OrdersManagement extends Component {
         }
         setTimeout(async()=>{
             await getBookTableList(authrizations);
-            await getOrderFoodListByTableId(tableData.booked_tabel_id, authrizations);
+            (tableData) && await getOrderFoodListByTableId(tableData.booked_tabel_id, authrizations);
             resolve();
         }, API_EXE_TIME)
     }
@@ -241,6 +242,7 @@ const mapDispatchToProps=dispatch=>({
     HotelTableAction: bindActionCreators(HotelTableAction, dispatch),
     OrderAction: bindActionCreators(OrderAction, dispatch),
     StoreAction: bindActionCreators(StoreAction, dispatch),
-    InvoiceAction: bindActionCreators(InvoiceAction,dispatch)
+    InvoiceAction: bindActionCreators(InvoiceAction,dispatch),
+    FoodAction: bindActionCreators(FoodAction,dispatch)
 });
 export default connect(mapStateToProps,mapDispatchToProps)(OrdersManagement);

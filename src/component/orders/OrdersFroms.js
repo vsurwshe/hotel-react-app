@@ -57,40 +57,25 @@ const OrderFoodTabel = (props) => {
                 icons={{ Add: () => <Button variant="contained" color="primary">Add Food</Button> }}
                 editable={{
                     isEditable: rowData => true,
-                    isEditHidden: rowData => false,
                     isDeletable: rowData => true,
-                    isDeleteHidden: rowData => false,
-                    onRowAdd: newData => {
-                        return new Promise(async (resolve, reject) => {
-                            if (newData) {
-                                SaveMethod({ data: newData, resolve, tableData, action: FromActions.CR })
-                            } else {
-                                reject();
-                            }
-                        }
-                        )
-                    },
-                    onRowUpdate: (newData, oldData) => {
-                        return new Promise(async (resolve, reject) => {
-                            if (newData) {
-                                SaveMethod({ data: newData, resolve, tableData, action: FromActions.ED })
-                            } else {
-                                reject();
-                            }
-                        })
-                    },
-                    onRowDelete: oldData => {
-                        return new Promise(async (resolve, reject) => {
-                            if (oldData) {
-                                SaveMethod({ data: oldData, resolve, tableData, action: FromActions.DE })
-                            } else {
-                                reject();
-                            }
-                        })
-                    }
+                    onRowAdd: newData =>onOrderFoodTableActionRow({newData ,tableData, SaveMethod, action: FromActions.CR}),
+                    onRowUpdate: (newData, oldData) => onOrderFoodTableActionRow({newData ,tableData, SaveMethod, action: FromActions.ED}),
+                    onRowDelete: oldData => onOrderFoodTableActionRow({newData: oldData,tableData, SaveMethod, action: FromActions.DE})
                 }}
             />}
     </>
+}
+
+// this method will used for ths on orderFoodTable Add
+const onOrderFoodTableActionRow=(propsData)=>{
+    const { newData, tableData, SaveMethod, action }=propsData
+    return new Promise(async (resolve, reject) => {
+        if (newData) {
+            SaveMethod({ data: newData, resolve, tableData, action })
+        } else {
+            reject();
+        }
+    })
 }
 
 // this method load the main order table

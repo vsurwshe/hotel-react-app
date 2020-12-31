@@ -2,30 +2,42 @@ import Dashboard from '../dashboard/Dashboard';
 import OrdersManagement from '../orders/OrdersManagement';
 import StoreManagement from '../store/StoreManagement';
 import TablesManagement from '../tables/TablesManagement';
-import ProductsManagement from '../products/ProductsManagement';
 import ProfileManagement from '../profile/ProfileManagement'
 import Settings from '../settings/Settings'
 import InvoiceManagement from '../InvoiceManagement/InvoiceManagement';
+import FoodManagement from '../foodManagement/FoodManagement';
 
 
 export default [
     {
-        icon:"nc-icon nc-diamond",
+        icon:"nc-icon nc-bank icon-bold",
         name:"Dashboard",
         path:"/",
         component:Dashboard,
     },
     {
-        icon:"nc-icon nc-paper",
+        icon:"nc-icon nc-paper icon-bold",
         name:"Orders",
         path:"/orders",
         component:OrdersManagement
     },
     {
-        icon:"nc-icon nc-single-02",
+        icon:"nc-icon nc-paper-2 icon-bold",
         name:"Invoice",
         path:"/invoice",
         component:InvoiceManagement
+    },
+    {
+        icon:"nc-icon nc-sun-fog-29",
+        name:"Foods",
+        path:"/foods",
+        component:FoodManagement
+    },
+    {
+        icon:"nc-icon nc-support-17",
+        name:"Tables",
+        path:"/tables",
+        component:TablesManagement,
     },
     {
         icon:"nc-icon nc-shop",
@@ -34,19 +46,7 @@ export default [
         component:StoreManagement,
     },
     {
-        icon:"nc-icon nc-app",
-        name:"Tables",
-        path:"/tables",
-        component:TablesManagement,
-    },
-    {
-        icon:"nc-icon nc-bag-16",
-        name:"Products",
-        path:"/products",
-        component:ProductsManagement
-    },
-    {
-        icon:"nc-icon nc-alert-circle-i",
+        icon:"nc-icon nc-circle-09",
         name:"Profile",
         path:"/profile",
         component:ProfileManagement,

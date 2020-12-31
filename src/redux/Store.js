@@ -7,6 +7,7 @@ import StoreState from '../redux/reducers/StoreState';
 import HotelTableState from '../redux/reducers/HotelTableState';
 import MainOrdersState from '../redux/reducers/MainOrdersState';
 import InvoiceState from '../redux/reducers/InvoiceState';
+import FoodState from './reducers/FoodState'
 // this function save state into local storage.
 const saveToLocalStorage=(state)=>{
     try{
@@ -43,14 +44,15 @@ const reducer = combineReducers({
   StoreState,
   HotelTableState,
   MainOrdersState,
-  InvoiceState
+  InvoiceState,
+  FoodState
 });
   
 // this functions apply logger funtionality during development mode 
 const enhancer= compose(applyMiddleware(thunk, logger));
   
 // this is common action through out application will be used
-const initialState = reducer({},{},{})
+const initialState = reducer({},{},{},{})
 const rootReducer = (state, action) => {
   if (action.type === 'CLEAR_DATA') {
     state = initialState

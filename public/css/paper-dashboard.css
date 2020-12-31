@@ -2851,6 +2851,19 @@ License - nucleoapp.com/license/
 .nc-zoom-split::before {
   content: "\ea64"; }
 
+/* Custom Modify */
+.nc-paper-2::before {
+  content: "\ea12";
+}
+
+.nc-support-17::before {
+  content: "\ea55";
+}
+
+.nc-circle-09::before {
+  content: "\ea50";
+}
+
 /* all icon font classes list here */
 .table .img-wrapper {
   width: 40px;

@@ -3,7 +3,7 @@ import { CreateInstance, HeaderConfig } from '../../assets/config/Config';
 const getListOfInvoice=(authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .get('/invoice/list',HeaderConfig(authrizationKey))
+            .get('/api/invoice/list',HeaderConfig(authrizationKey))
             .then(response => dispatch(saveInvoiceList(response.data && response.data.data)) )
             .catch(error => console.log("Error ", error))
     }
@@ -12,7 +12,7 @@ const getListOfInvoice=(authrizationKey)=>{
 const postInvoiceData=(invoiceData, authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .post('/invoice/save',invoiceData,HeaderConfig(authrizationKey))
+            .post('/api/invoice/save',invoiceData,HeaderConfig(authrizationKey))
             .then(response => dispatch(saveInvoiceData(response.data && response.data.data)) )
             .catch(error => console.log("Error ", error))
     }
@@ -21,7 +21,7 @@ const postInvoiceData=(invoiceData, authrizationKey)=>{
 const updateInvoiceData=(invoiceID,invoiceData, authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .put('/invoice/update/'+invoiceID,invoiceData,HeaderConfig(authrizationKey))
+            .put('/api/invoice/update/'+invoiceID,invoiceData,HeaderConfig(authrizationKey))
             .then(response => dispatch(saveInvoiceData(response.data && response.data.data)) )
             .catch(error => console.log("Error ", error))
     }
@@ -30,7 +30,7 @@ const updateInvoiceData=(invoiceID,invoiceData, authrizationKey)=>{
 const deleteInvoiceData=(invoiceID,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .delete('/invoice/delete/'+invoiceID,HeaderConfig(authrizationKey))
+            .delete('/api/invoice/delete/'+invoiceID,HeaderConfig(authrizationKey))
             .then(response => dispatch(saveInvoiceData(response.data && response.data.data)) )
             .catch(error => console.log("Error ", error))
     }
