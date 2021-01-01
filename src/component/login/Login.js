@@ -6,73 +6,74 @@ import { API_EXE_TIME } from '../../assets/config/Config';
 import * as LoginAction from '../../redux/actions/LoginAction';
 import { Alert } from '@material-ui/lab';
 import Loader from '../utilites/Loader';
-import './css/main.css';
-import './css/util.css';
-import { renderTextFiled } from '../utilites/FromUtilites';
+import './css/loginForm2.scss';
+import { renderLoginTextFiled, renderSanckBar  } from '../utilites/FromUtilites';
 
-
+//this is main login component
 class Login extends Component {
-    state = { 
-        loadLoginValue:false
+    state = {
+        loadLoginValue: false
     }
 
-    handleLoginValue=()=>{this.setState({loadLoginValue: !this.state.loadLoginValue})}
+    // this method will handel login loading value
+    handleLoginValue = () => { this.setState({ loadLoginValue: !this.state.loadLoginValue }) }
 
-    render() { 
+    render() {
         return this.loadLoginFrom()
     }
 
-    loadLoginFrom=()=>{
-        const { loadLoginValue }=this.state
-        const { message, color}=this.props.LoginState
-        return <LoginFrom 
-            SaveMethod={this.callLoginApi} 
-            loading={loadLoginValue}  
+    // this method will used for login form render
+    loadLoginFrom = () => {
+        const { loadLoginValue } = this.state
+        const { message, color } = this.props.LoginState
+        return <LoginFrom
+            SaveMethod={this.callLoginApi}
+            loading={loadLoginValue}
             message={message}
             color={color}
         />
     }
 
-    callLoginApi=async(values)=>{
-        const { GetLogin, saveMessage }=this.props.LoginAction
+    // this method will used for calling login api
+    callLoginApi = async (values) => {
+        const { GetLogin, saveMessage } = this.props.LoginAction
         await this.handleLoginValue()
         await GetLogin(values);
-        setTimeout(async()=>{
+        setTimeout(async () => {
             await this.handleLoginValue();
-            await saveMessage("","");
-        },API_EXE_TIME)
+            await saveMessage("", "");
+        }, API_EXE_TIME)
     }
 }
 
-let LoginFrom=(props)=>{
+// this compoent will load the login screen
+let LoginFrom = (props) => {
     const { SaveMethod, pristine, submitting, handleSubmit, loading, message, color } = props
-    return <div className="limiter">
-		<div className="container-login100" style={{backgroundImage: "url('./images/bg-01.jpg')"}}>
-			<div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-            {(message && color && message !== "" && color !== "")&& <Alert severity={color}><h2>{message}</h2></Alert>}
-                <form className="login100-form validate-form" onSubmit={handleSubmit(SaveMethod)}>
-					<span className="login100-form-title p-b-49"> Login </span>
-					<Field name="email" component={renderTextFiled} type="email" placeholder="Enter your email"  />
-                    <Field name="password" component={renderTextFiled} type="password" placeholder="Enter your password"  />
-					{loading && <Loader message="" size={40} />}
-                    <div className="text-right p-t-8 p-b-31"> <a href="/"> Forgot password? </a></div>
-					<div className="container-login100-form-btn">
-						<div className="wrap-login100-form-btn">
-							<div className="login100-form-bgbtn"></div>
-							<button type="submit" className="login100-form-btn" disabled={pristine || submitting}> Login to account </button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+    return <div style={{paddingTop:"20%"}}>
+        {(message && color && message !== "" && color !== "") && 
+            // <Alert severity={color}><h6>{message}</h6></Alert>
+            renderSanckBar({ open: (message && color && message !== "" && color !== "") ?true :false, color,message})
+        }
+        <form onSubmit={handleSubmit(SaveMethod)}>
+            <h1>Admin Dashborad Sign-In</h1>
+            <div class="inset">
+                <Field name="email" component={renderLoginTextFiled} type="text" label="EMAIL ADDRESS" placeholder="Enter your email" />
+                <Field name="password" component={renderLoginTextFiled} type="password" label="PASSWORD" placeholder="Enter your password" />
+            </div>
+            {loading && <Loader message="" size={40} />}
+            <p class="p-container">
+                <input type="submit" value="Log in" style={{float:"left"}} disabled={pristine || submitting} />
+                <span style={{float:"right"}}>Forgot password ?</span>
+            </p>
+        </form>
+    </div>
 }
 
 const afterSubmit = (result, dispatch) => dispatch(reset('Login'));
-LoginFrom = reduxForm({form:"Login", onSubmitSuccess: afterSubmit})(LoginFrom)
+LoginFrom = reduxForm({ form: "Login", onSubmitSuccess: afterSubmit })(LoginFrom)
 
-const mapStateToProps=state=>{return state;}
-const mapDispatchToProps=dispatch=>({
+const mapStateToProps = state => { return state; }
+const mapDispatchToProps = dispatch => ({
     LoginAction: bindActionCreators(LoginAction, dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
