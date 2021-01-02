@@ -231,9 +231,47 @@ class OrdersManagement extends Component {
     }
 
     callSaveInvoiceApi=(propsData)=>{
-        const { data, resolve, tableData, action }=propsData
-        console.log("Data ",data)
+        const { data }=propsData
+        const { orderFoodList }=this.props.MainOrdersState
+        let foodItem=(orderFoodList && orderFoodList.length >0) && orderFoodList.filter(item=> item.table.booked_tabel_id === data.booked_tabel_id)
+        if(foodItem && foodItem.length >0 ){
+            let invoiceData= foodItem.map(item=>convertAccordingToInvoice({data:item}))
+            saveInvoiceData({invoiceData:invoiceData[0], props:this.props, close:this.handelOrder})
+        }
     }
+}
+
+// this method will help to convert body data accroding to invoice api
+const convertAccordingToInvoice=(propsData)=>{
+    const { data }=propsData
+    const { food_list, table }=data
+    let invoiceItem= (food_list && food_list.length>0)&& food_list.map(item=>{
+        return {
+            "invoice_item_name":item.order_food_name,
+            "invoice_item_price":item.order_food_unit_price,
+            "invoice_item_qty":item.order_food_qty,
+            "invoice_item_total_price":item.order_food_total_price
+        }
+    })
+    return {
+        "invoice_table":table.table_id,
+        "invoice_gst":18,
+        "invoice_items":invoiceItem
+    }
+}
+
+const saveInvoiceData=async(propsData)=>{
+    const { invoiceData, props, close}=propsData
+    const { authrizations }=props.LoginState
+    const { postInvoiceData, getListOfInvoice }=props.InvoiceAction
+    const { getBookTableList, getFreeTableList }=props.OrderAction
+    await postInvoiceData(invoiceData,authrizations)
+    setTimeout(async()=>{
+        await getListOfInvoice(authrizations);
+        await getBookTableList(authrizations);
+        await getFreeTableList(authrizations);
+        await close();
+    },API_EXE_TIME)
 }
  
 const mapStateToProps=state=>{return state}

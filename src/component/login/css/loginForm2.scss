@@ -4,10 +4,10 @@ body {
 	font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
   color:white;
   font-size:12px;
-  background:#333 url(/images/classy_fabric.png);
+  // background:#333 url(/images/classy_fabric.png);
 }
 
-form {
+.form-class {
  	background:#111; 
   width:300px;
   margin:30px auto;
@@ -18,7 +18,7 @@ form {
   box-shadow: 0 5px 10px 5px rgba(0,0,0,0.2);
 }
 
-form:after {
+.form-class:after {
   content:"";
   display:block;
   position:absolute;
@@ -29,7 +29,7 @@ form:after {
   top:0;
 }
 
-form:before {
+.form-class:before {
  	content:"";
   display:block;
   position:absolute;
@@ -46,7 +46,7 @@ form:before {
   border-top:1px solid #19191a;
 }
 
-form h1 {
+.form-class h1 {
   font-size:18px;
   text-shadow:0 1px 0 black;
   text-align:center;
@@ -55,7 +55,7 @@ form h1 {
   position:relative;
 }
 
-form h1:after {
+.form-class h1:after {
  	content:"";
   display:block;
   width:250px;
@@ -75,7 +75,7 @@ label {
   padding-bottom:9px;
 }
 
-input[type=text],
+input[type=text1],
 input[type=password] {
   color: #fff;
  	width:100%;
@@ -139,9 +139,9 @@ input[type=submit]:hover {
     inset 0 -10px 10px rgba(255,255,255,0.1);
 }
 
-input[type=text]:hover,
+input[type=text1]:hover,
 input[type=password]:hover,
-label:hover ~ input[type=text],
+label:hover ~ input[type=text1],
 label:hover ~ input[type=password] {
  	background:#27292c;
 }

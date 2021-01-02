@@ -10,7 +10,7 @@ const FoodFrom=(props)=>{
     const [loading, setLoading] = useState(false);
     return <div className="card" style={{width:"100%"}}>
         <div className="card-header">
-            <h5 className="card-title">{capitalizeFirstLatter(operation+"")} Store Record</h5>
+            <h5 className="card-title">{capitalizeFirstLatter(operation+"")} Food Record</h5>
         </div>
         <div className="card-body">
             <form onSubmit={handleSubmit( values=>SaveMethod({data: values, setLoading, operation}))}>

@@ -3,7 +3,7 @@ import OrdersManagement from '../orders/OrdersManagement';
 import StoreManagement from '../store/StoreManagement';
 import TablesManagement from '../tables/TablesManagement';
 import ProfileManagement from '../profile/ProfileManagement'
-import Settings from '../settings/Settings'
+// import Settings from '../settings/Settings'
 import InvoiceManagement from '../InvoiceManagement/InvoiceManagement';
 import FoodManagement from '../foodManagement/FoodManagement';
 
@@ -51,10 +51,10 @@ export default [
         path:"/profile",
         component:ProfileManagement,
     },
-    {
-        icon:"nc-icon nc-settings",
-        name:"Settings",
-        path:"/settings",
-        component:Settings,
-    }
+    // {
+    //     icon:"nc-icon nc-settings",
+    //     name:"Settings",
+    //     path:"/settings",
+    //     component:Settings,
+    // }
 ]

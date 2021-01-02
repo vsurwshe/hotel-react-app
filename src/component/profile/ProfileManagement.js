@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as StoreAction from '../../redux/actions/StoreAction'
+import ProfileForm from './ProfileForm';
 class ProfileManagement extends Component {
-    state = {  }
-    render() { 
-        return<h2>ProfileManagement</h2>;
+    state = { 
+        loadingProfileForm:false
     }
+    render() {
+        return <ProfileForm />
+    }
+
+
 }
- 
-export default ProfileManagement;
+
+const mapStateToProps=state=>{return state}
+const mapDispatchToProps=dispatch=>({
+    StoreAction:bindActionCreators(StoreAction, dispatch)
+})
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileManagement);
