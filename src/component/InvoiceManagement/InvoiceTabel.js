@@ -7,6 +7,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const InvoiceTabel=(props)=>{
+  const {openModel}=props
   const { listOfInvoice }=props.InvoiceState
   const columns = [
       { title: 'Sr.\u00a0No.', field: 'key', width: 20 },
@@ -31,7 +32,7 @@ const InvoiceTabel=(props)=>{
         title: "",
         width:8,
         render: (rowData)=> {
-            return<VisibilityIcon variant="contained" color="primary" onClick={()=>console.log(rowData.data)} />
+            return<VisibilityIcon variant="contained" color="primary" onClick={()=> openModel(rowData.data)} />
         }
       },
       {

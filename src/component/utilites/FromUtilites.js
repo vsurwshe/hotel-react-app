@@ -2,6 +2,8 @@ import React from 'react';
 import { TextField } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 // this compoent rendering text filed
 const renderTextFiled=({type, name, placeholder, dataValidate, input, meta: { touched, invalid, error }, ...custom})=>(
@@ -121,6 +123,21 @@ const renderSanckBar=({open, color, message})=>(
 // this is alert function used in above render sanck bar compoent
 function Alert(props) { return <MuiAlert elevation={6} variant="filled" {...props} />; }
 
+// this method will used for the download the invoice table as pdf
+const dwonloadInvoice = (docId) => {
+    let htmlTable = document.getElementById(docId);
+    html2canvas(htmlTable, {
+        allowTaint: true,
+        backgroundColor: "rgba(255, 255, 255, 1)",
+    }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        pdf.addImage(imgData, 'PNG', 25, 70);
+        pdf.save("downloadInvoice.pdf");
+    });
+  }
+  
+
 export{
     renderTextFiled,
     renderFromTextFiled,
@@ -130,5 +147,6 @@ export{
     renderHiddenField,
     renderSelectFileds,
     renderLoginTextFiled,
-    renderSanckBar
+    renderSanckBar,
+    dwonloadInvoice
 }
