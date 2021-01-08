@@ -6,6 +6,7 @@ import ProfileManagement from '../profile/ProfileManagement'
 // import Settings from '../settings/Settings'
 import InvoiceManagement from '../InvoiceManagement/InvoiceManagement';
 import FoodManagement from '../foodManagement/FoodManagement';
+import RoomBookingManagement from '../roomBooking/RoomBookingManagement';
 
 
 export default [
@@ -20,6 +21,12 @@ export default [
         name:"Orders",
         path:"/orders",
         component:OrdersManagement
+    },
+    {
+        icon:"nc-icon nc-paper icon-bold",
+        name:"Rooms",
+        path:"/roomBooking",
+        component:RoomBookingManagement
     },
     {
         icon:"nc-icon nc-paper-2 icon-bold",
