@@ -7,11 +7,13 @@ import * as InvoiceAction from "../../redux/actions/InvoiceAction"
 import Loader from '../utilites/Loader';
 import Invoice from './Invoice';
 import { dwonloadInvoice } from '../utilites/FromUtilites';
+import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
 class InvoiceManagement extends Component {
     state = { 
         loadInvoiceValue: false,
         viewInvoice:false,
-        fetchedInvoiceData:[]
+        fetchedInvoiceData:[],
+        action:""
     }
 
     componentDidMount=async()=>{
@@ -24,7 +26,7 @@ class InvoiceManagement extends Component {
     }
 
     // this method will used for view invoice model
-    handelViewInvoice=(fetchedInvoiceData)=>{ this.setState({viewInvoice : !this.state.viewInvoice, fetchedInvoiceData}) }
+    handelViewInvoice=(fetchedInvoiceData, action)=>{ this.setState({viewInvoice : !this.state.viewInvoice, fetchedInvoiceData, action}) }
 
     // this method will used for loading
     handelLoadInvoiceValue=()=>{ this.setState({loadInvoiceValue : !this.state.loadInvoiceValue})}
@@ -41,17 +43,34 @@ class InvoiceManagement extends Component {
 
     // this method will used for the loading invoice model
     loadInvoiceModel=()=>{
-        const { viewInvoice, fetchedInvoiceData }=this.state
+        const { viewInvoice, fetchedInvoiceData, action }=this.state
         return <Dialog open={viewInvoice} onClose={()=>this.handelViewInvoice()} fullWidth={true} maxWidth = {'md'}>
             <DialogContent>
                 <Invoice data={fetchedInvoiceData} />
                 <div style={{float:"right", marginTop:10}}>
-                    <Button type="button" variant="outlined" color="primary" onClick={() => dwonloadInvoice("hotelInvoiceId")}> Download Invoice </Button>&nbsp;&nbsp;
-                    {/* <Button type="button" variant="outlined" color="primary" onClick={() => this.callBookTabelApi({data: orderTableData, action:FromActions.DE}) }> Free table </Button>&nbsp;&nbsp; */}
-                    <Button type="button" variant="outlined" color="secondary" onClick={() => this.handelViewInvoice() }> Cancel</Button>
+                    { action === FromActions.VI && <Button type="button" variant="outlined" color="primary" onClick={() => dwonloadInvoice("hotelInvoiceId")}> Download Invoice </Button>}
+                    { action === FromActions.DE && <Button type="button" variant="outlined" color="primary" onClick={() => this.deleteInvoice()}> Delete Invoice </Button>}
+                    &nbsp;&nbsp;<Button type="button" variant="outlined" color="secondary" onClick={() => this.handelViewInvoice() }> Cancel</Button>
                 </div>
             </DialogContent>
         </Dialog>
+    }
+
+    // this method will used for deleteing invoice
+    deleteInvoice=async()=>{
+        const {fetchedInvoiceData }=this.state
+        const { authrizations }=this.props.LoginState
+        const { getListOfInvoice, deleteInvoiceData }= this.props.InvoiceAction
+        var makeInvoice = window.confirm("Are you sure want to delete invoice ?");
+        if(makeInvoice){
+            await this.handelLoadInvoiceValue();
+            await deleteInvoiceData(fetchedInvoiceData.invoice_id, authrizations)
+            setTimeout(async()=>{
+                await getListOfInvoice(authrizations);
+                await this.handelViewInvoice();
+                await this.handelLoadInvoiceValue();
+            }, API_EXE_TIME)
+        }
     }
 }
 

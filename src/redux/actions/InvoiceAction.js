@@ -72,8 +72,6 @@ export function saveInvoiceData(invoiceData) {
     }
 }
 
-
-
 export {
     getListOfInvoice,
     postInvoiceData,

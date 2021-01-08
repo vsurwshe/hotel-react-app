@@ -5,6 +5,7 @@ import moment from 'moment'
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import { FromActions } from '../../assets/config/Config';
 
 const InvoiceTabel=(props)=>{
   const {openModel}=props
@@ -32,21 +33,14 @@ const InvoiceTabel=(props)=>{
         title: "",
         width:8,
         render: (rowData)=> {
-            return<VisibilityIcon variant="contained" color="primary" onClick={()=> openModel(rowData.data)} />
+            return<VisibilityIcon variant="contained" color="primary" onClick={()=> openModel(rowData.data, FromActions.VI)} />
         }
       },
       {
         title: "",
         width:8,
         render: (rowData)=> {
-            return<CreateIcon variant="contained" color="primary" onClick={()=>console.log(rowData.data)} />
-        }
-      },
-      {
-        title: "",
-        width:8,
-        render: (rowData)=> {
-            return <DeleteOutlineIcon variant="contained" color="secondary" onClick={()=>console.log(rowData.data)} />
+            return <DeleteOutlineIcon variant="contained" color="secondary" onClick={()=>openModel(rowData.data, FromActions.DE)} />
         }
       }  
     ];

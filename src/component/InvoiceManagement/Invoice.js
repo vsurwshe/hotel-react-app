@@ -11,10 +11,12 @@ const Invoice=(props)=>{
     const { authrizations }=props.LoginState
     const { getInvoiceById}=props.InvoiceAction
     const [count, setCountValues] = useState(0)
-    if(invoiceDataById && invoiceDataById.length <=0 && count ===0){
+    let exitsInvoiceDataById= (invoiceDataById && invoiceDataById.length >0) && invoiceDataById.filter(item=> item.invoice_id === data.invoice_id)
+    if((exitsInvoiceDataById === false || exitsInvoiceDataById.length <= 0) && count ===0){
          getInvoiceDetails({getInvoiceById, authrizations, data, count, setCountValues}) 
+         exitsInvoiceDataById= (invoiceDataById && invoiceDataById.length >0) && invoiceDataById.filter(item=> item.invoice_id === data.invoice_id)
     }
-    return (invoiceDataById && invoiceDataById.length <=0 && Object.keys(invoiceDataById).length <=0 ) ? <Loader message="Loading..." size={40} /> : MainTableSection({"mainProps":props}) 
+    return (exitsInvoiceDataById && exitsInvoiceDataById.length > 0) ? <Loader message="Loading..." size={40} /> : MainTableSection({"mainProps":props}) 
 }
 
 // this method calling invoice api for fecthing data

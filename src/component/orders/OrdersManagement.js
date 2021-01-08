@@ -233,10 +233,14 @@ class OrdersManagement extends Component {
     callSaveInvoiceApi=(propsData)=>{
         const { data }=propsData
         const { orderFoodList }=this.props.MainOrdersState
-        let foodItem=(orderFoodList && orderFoodList.length >0) && orderFoodList.filter(item=> item.table.booked_tabel_id === data.booked_tabel_id)
-        if(foodItem && foodItem.length >0 ){
-            let invoiceData= foodItem.map(item=>convertAccordingToInvoice({data:item}))
-            saveInvoiceData({invoiceData:invoiceData[0], props:this.props, close:this.handelOrder})
+        // var makeInvoice = prompt("Are you sure want to make invoice ?");
+        var makeInvoice = window.confirm("Are you sure want to make invoice ?");
+        if (makeInvoice) {
+            let foodItem=(orderFoodList && orderFoodList.length >0) && orderFoodList.filter(item=> item.table.booked_tabel_id === data.booked_tabel_id)
+            if(foodItem && foodItem.length >0 ){
+                let invoiceData= foodItem.map(item=>convertAccordingToInvoice({data:item}))
+                saveInvoiceData({invoiceData:invoiceData[0], props:this.props, close:this.handelOrder})
+            }
         }
     }
 }
