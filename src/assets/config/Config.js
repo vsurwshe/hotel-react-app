@@ -16,10 +16,20 @@ const FromActions={
   "VIED":"VIEWEDIT"
 }
 
+const HeaderConfig=(authrizationKey)=>{
+  return {
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization": "Bearer "+authrizationKey
+    }
+  }
+}
+
 export{
     API_EXE_TIME,
     apiUrl,
     CreateInstance,
-    FromActions
+    FromActions,
+    HeaderConfig
 }
 

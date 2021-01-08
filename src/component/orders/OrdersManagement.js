@@ -6,8 +6,11 @@ import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
 import * as HotelTableAction from '../../redux/actions/HotelTableAction'
 import * as OrderAction from '../../redux/actions/MainOrdersAction'
 import * as StoreAction from '../../redux/actions/StoreAction'
+import * as InvoiceAction from '../../redux/actions/InvoiceAction'
+import * as FoodAction from '../../redux/actions/FoodAction'
 import "./css/Grid.css";
 import { BookTabelForm, OrderFoodTabel, MainOrderFoodTabel } from './OrdersFroms';
+import Loader from '../utilites/Loader';
 
 class OrdersManagement extends Component {
     state = {  
@@ -21,13 +24,16 @@ class OrdersManagement extends Component {
     componentDidMount=async()=>{
         const { authrizations }=this.props.LoginState
         const { listOfBookedTabels, listOfFreeTabels }=this.props.MainOrdersState
-        const { listOfStoreItem }=this.props.StoreState
+        const { listOfFoodsItem }=this.props.FoodState
+        const { listOfInvoice }=this.props.InvoiceState
         const { getBookTableList, getFreeTableList }=this.props.OrderAction
-        const { GetListOfStoreItem }= this.props.StoreAction
+        const { GetListOfFoodItem }= this.props.FoodAction
+        const { getListOfInvoice }= this.props.InvoiceAction
         await this.handelHotelOrders();
         (listOfFreeTabels && listOfFreeTabels.length <=0) && await getFreeTableList(authrizations);
         (listOfBookedTabels && listOfBookedTabels.length <=0) && await getBookTableList(authrizations);
-        (listOfStoreItem && listOfStoreItem.length <=0) && await GetListOfStoreItem(authrizations);
+        (listOfFoodsItem && listOfFoodsItem.length <=0) && await GetListOfFoodItem(authrizations);
+        (listOfInvoice && listOfInvoice.length <=0) && await getListOfInvoice(authrizations);
         await this.handelHotelOrders();
     }
 
@@ -38,7 +44,8 @@ class OrdersManagement extends Component {
     handelOrder=(orderTableData)=>{  this.setState({ orderVaule : !this.state.orderVaule, orderTableData}) }
 
     render() { 
-        return this.loadGrid();
+        const { loadHotelOrders }=this.state
+        return loadHotelOrders ? <Loader message="Loading..." size={50} /> : this.loadGrid();
     }
     
     loadGrid=()=>{
@@ -107,7 +114,7 @@ class OrdersManagement extends Component {
 
     addOrder=()=>{
         const { orderVaule, orderTableData }=this.state
-        const { listOfStoreItem }=this.props.StoreState
+        const { listOfFoodsItem }=this.props.FoodState
           // creating columns
         const columns = [
           { title: 'Name', 
@@ -116,13 +123,13 @@ class OrdersManagement extends Component {
                 const { order_food_name }=props.rowData
                 return <select id="order_food_name" value={order_food_name} onChange={(event) =>{
                         var data = { ...props.rowData };
-                        let filterRecord=(listOfStoreItem && listOfStoreItem.length >0) && listOfStoreItem.filter((item)=> item.product_name === event.target.value)    
+                        let filterRecord=(listOfFoodsItem && listOfFoodsItem.length >0) && listOfFoodsItem.filter((item)=> item.food_name === event.target.value)    
                         data.order_food_name= event.target.value;
-                        data.order_food_unit_price= (filterRecord && filterRecord.length >0 ) ? filterRecord[0].product_unit_price :""
+                        data.order_food_unit_price= (filterRecord && filterRecord.length >0 ) ? filterRecord[0].food_price :""
                         props.onRowDataChange(data);
                     }}>
                     <option value="">Select Food Name</option>
-                    { (listOfStoreItem && listOfStoreItem.length >0) && listOfStoreItem.map((item,key)=><option key={key} value={item.product_name}>{item.product_name}</option>)}
+                    { (listOfFoodsItem && listOfFoodsItem.length >0) && listOfFoodsItem.map((item,key)=><option key={key} value={item.food_name}>{item.food_name}</option>)}
                 </select>
             } 
           },
@@ -132,8 +139,8 @@ class OrdersManagement extends Component {
                 const { order_food_name, order_food_qty }=props.rowData
                 return  <input style={{width:"100%", backgroundColor:"skyblue"}} id="order_food_qty" value={order_food_qty} onChange={(event) => {
                     var data = { ...props.rowData };
-                    let filterRecord=(listOfStoreItem && listOfStoreItem.length >0) && listOfStoreItem.filter((item)=> item.product_name === order_food_name);
-                    let netPrice= (filterRecord && filterRecord.length >0  && event.target.value ) && filterRecord[0].product_unit_price * event.target.value;
+                    let filterRecord=(listOfFoodsItem && listOfFoodsItem.length >0) && listOfFoodsItem.filter((item)=> item.food_name === order_food_name);
+                    let netPrice= (filterRecord && filterRecord.length >0  && event.target.value ) && filterRecord[0].food_price * event.target.value;
                     data.order_food_qty= event.target.value;
                     data.order_food_total_price= netPrice;
                     props.onRowDataChange(data);
@@ -150,6 +157,7 @@ class OrdersManagement extends Component {
                  </div>
                 <OrderFoodTabel  mainProps={this.props} tableData={orderTableData} columns={columns} SaveMethod={this.callSaveFoodApi}  />
                 <div style={{float:"right", marginTop:10}}>
+                    <Button type="button" variant="outlined" color="primary" onClick={() => this.callSaveInvoiceApi({data: orderTableData, action:FromActions.DE}) }> Make Invoice </Button>&nbsp;&nbsp;
                     <Button type="button" variant="outlined" color="primary" onClick={() => this.callBookTabelApi({data: orderTableData, action:FromActions.DE}) }> Free table </Button>&nbsp;&nbsp;
                     <Button type="button" variant="outlined" color="secondary" onClick={() => this.handelOrder() }> Cancel</Button>
                 </div>
@@ -181,7 +189,6 @@ class OrdersManagement extends Component {
             await setLoading(true);
             await createBookTabelRecord(newBookTabelData, authrizations);
         }else if(action === FromActions.DE){
-            console.log("Data ", data)
             await deleteBookTabelRecord(data.table_id , authrizations)
         }
         setTimeout(async()=>{
@@ -218,16 +225,66 @@ class OrdersManagement extends Component {
         }
         setTimeout(async()=>{
             await getBookTableList(authrizations);
-            await getOrderFoodListByTableId(tableData.booked_tabel_id, authrizations);
+            (tableData) && await getOrderFoodListByTableId(tableData.booked_tabel_id, authrizations);
             resolve();
         }, API_EXE_TIME)
     }
+
+    callSaveInvoiceApi=(propsData)=>{
+        const { data }=propsData
+        const { orderFoodList }=this.props.MainOrdersState
+        // var makeInvoice = prompt("Are you sure want to make invoice ?");
+        var makeInvoice = window.confirm("Are you sure want to make invoice ?");
+        if (makeInvoice) {
+            let foodItem=(orderFoodList && orderFoodList.length >0) && orderFoodList.filter(item=> item.table.booked_tabel_id === data.booked_tabel_id)
+            if(foodItem && foodItem.length >0 ){
+                let invoiceData= foodItem.map(item=>convertAccordingToInvoice({data:item}))
+                saveInvoiceData({invoiceData:invoiceData[0], props:this.props, close:this.handelOrder})
+            }
+        }
+    }
+}
+
+// this method will help to convert body data accroding to invoice api
+const convertAccordingToInvoice=(propsData)=>{
+    const { data }=propsData
+    const { food_list, table }=data
+    let invoiceItem= (food_list && food_list.length>0)&& food_list.map(item=>{
+        return {
+            "invoice_item_name":item.order_food_name,
+            "invoice_item_price":item.order_food_unit_price,
+            "invoice_item_qty":item.order_food_qty,
+            "invoice_item_total_price":item.order_food_total_price
+        }
+    })
+    return {
+        "invoice_table":table.table_id,
+        "invoice_gst":18,
+        "invoice_items":invoiceItem
+    }
+}
+
+const saveInvoiceData=async(propsData)=>{
+    const { invoiceData, props, close}=propsData
+    const { authrizations }=props.LoginState
+    const { postInvoiceData, getListOfInvoice }=props.InvoiceAction
+    const { getBookTableList, getFreeTableList }=props.OrderAction
+    await postInvoiceData(invoiceData,authrizations)
+    setTimeout(async()=>{
+        await getListOfInvoice(authrizations);
+        await getBookTableList(authrizations);
+        await getFreeTableList(authrizations);
+        await close();
+    },API_EXE_TIME)
 }
  
 const mapStateToProps=state=>{return state}
 const mapDispatchToProps=dispatch=>({
+    dispatch,
     HotelTableAction: bindActionCreators(HotelTableAction, dispatch),
     OrderAction: bindActionCreators(OrderAction, dispatch),
-    StoreAction: bindActionCreators(StoreAction, dispatch)
+    StoreAction: bindActionCreators(StoreAction, dispatch),
+    InvoiceAction: bindActionCreators(InvoiceAction,dispatch),
+    FoodAction: bindActionCreators(FoodAction,dispatch)
 });
 export default connect(mapStateToProps,mapDispatchToProps)(OrdersManagement);

@@ -3,7 +3,7 @@ import { CreateInstance } from '../../assets/config/Config'
 const getBookTableList=(authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .get('/orders/table/bookedTabelList',{
+        .get('/api/orders/table/bookedTabelList',{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
@@ -17,7 +17,7 @@ const getBookTableList=(authrizationKey)=>{
 const getFreeTableList=(authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .get('/orders/table/freeTabelList',{
+        .get('/api/orders/table/freeTabelList',{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
@@ -31,7 +31,7 @@ const getFreeTableList=(authrizationKey)=>{
 const createBookTabelRecord=(tabelRecord, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .post('/orders/table/save', tabelRecord,{
+        .post('/api/orders/table/save', tabelRecord,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
@@ -45,7 +45,7 @@ const createBookTabelRecord=(tabelRecord, authrizationKey)=>{
 const deleteBookTabelRecord=(tabelRecordId, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .delete('/orders/table/delete/'+tabelRecordId,{
+        .delete('/api/orders/table/delete/'+tabelRecordId,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
@@ -59,7 +59,7 @@ const deleteBookTabelRecord=(tabelRecordId, authrizationKey)=>{
 const createOrderTabelRecord=(orderRecord, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .post('/orders/food/save', orderRecord,{
+        .post('/api/orders/food/save', orderRecord,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
@@ -73,7 +73,7 @@ const createOrderTabelRecord=(orderRecord, authrizationKey)=>{
 const getOrderFoodListByTableId=(bookedTableId,authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .get('/orders/food/list/'+bookedTableId,{
+        .get('/api/orders/food/list/'+bookedTableId,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
@@ -87,7 +87,7 @@ const getOrderFoodListByTableId=(bookedTableId,authrizationKey)=>{
 const updateOrderFood=(foodData,authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .put('/orders/food/update/'+foodData.order_food_id,foodData,{
+        .put('/api/orders/food/update/'+foodData.order_food_id,foodData,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
@@ -101,7 +101,7 @@ const updateOrderFood=(foodData,authrizationKey)=>{
 const deleteOrderFood=(foodId,authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .delete('/orders/food/delete/'+foodId,{
+        .delete('/api/orders/food/delete/'+foodId,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey

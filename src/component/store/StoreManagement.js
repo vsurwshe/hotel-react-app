@@ -61,6 +61,8 @@ class StoreManagement extends Component {
         if(operation === FromActions.CR){
             await saveStoreItemRecord(data, authrizations);
         }else if(operation === FromActions.ED){
+            delete data["updated_at"]
+            delete data["created_at"]
             await updateStoreItemRecord(data, authrizations);
         }else if(operation === FromActions.DE){
             await deleteStoreItemRecord(data, authrizations);

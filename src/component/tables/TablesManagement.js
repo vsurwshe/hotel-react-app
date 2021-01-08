@@ -64,6 +64,8 @@ class TableManagement extends Component {
         if(operation === FromActions.CR){
             await saveHotelTableRecord(data, authrizations);
         }else if(operation === FromActions.ED){
+            delete data["updated_at"]
+            delete data["created_at"]
             await updateHotelTableRecord(data, authrizations);
         }else if(operation === FromActions.DE){
             await deleteHotelTableRecord(data, authrizations);

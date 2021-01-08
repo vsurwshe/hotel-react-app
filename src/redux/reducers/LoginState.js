@@ -9,7 +9,7 @@ const initialState={
 const LoginState=(state=initialState,action)=>{
     switch (action && action.type) {
         case "SET_AUTHRIZATION":
-            return {...state, userDetails:action.loginData.userDetails , authrizations: action.loginData.access_token}
+            return {...state, userDetails:action.loginData.usersDto , authrizations: action.loginData.token}
         case "SET_LOGIN_MESSAGE":
             return {...state, message: action.message, color:action.color}
         default:

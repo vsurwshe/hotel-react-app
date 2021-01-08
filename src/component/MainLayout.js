@@ -8,6 +8,7 @@ import * as LoginAction from '../redux/actions/LoginAction'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+// this is main compoent
 const MainLayout = (props) => {
     return  <div className="wrapper ">
         {LoadNav(props)}
@@ -15,6 +16,7 @@ const MainLayout = (props) => {
     </div>
 }
 
+// this loading router sidebar
 const LoadRouter = (props) => {
   return <div className="main-panel">
     <nav className="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
@@ -33,6 +35,7 @@ const LoadRouter = (props) => {
   </div>
 }
 
+// this loading main header 
 const navbarWrapper =(props)=>{
   return  <div className="container-fluid">
   <div className="navbar-wrapper">
@@ -53,6 +56,8 @@ const navbarWrapper =(props)=>{
  </div>
 
 }
+
+// this component will loading nav bar
 const LoadNav = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => { setOpen(true); };
@@ -75,6 +80,17 @@ const LoadNav = (props) => {
 </>
 }
 
+// this compoent will help to load single link on navbar
+const LoadSingleLink = (item, key) => {
+  return <li key={key}>
+    <a href={item.path}>
+      <i className={item.icon} />
+      {item.name}
+    </a>
+  </li>
+}
+
+// this compoent calling on Logout 
 const CallLogOut = (props) => {
   const { open, handleClose } = props
   const { UserLogout } = (props.mainProps && props.mainProps.LoginAction) && props.mainProps.LoginAction
@@ -88,16 +104,6 @@ const CallLogOut = (props) => {
       <Button onClick={UserLogout} color="primary"> Logout</Button>
     </DialogActions>
   </Dialog>
-}
-
-
-const LoadSingleLink = (item, key) => {
-  return <li key={key}>
-    <a href={item.path}>
-      <i className={item.icon} />
-      {item.name}
-    </a>
-  </li>
 }
 
 const mapStateToProps = state => { return state }

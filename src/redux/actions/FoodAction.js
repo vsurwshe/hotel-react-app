@@ -1,57 +1,57 @@
 import { CreateInstance } from '../../assets/config/Config'
 
-const GetListOfStoreItem=(authrizationKey)=>{
+const GetListOfFoodItem=(authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .get('/api/store/getAllStoreProduct',{
+            .get('/api/food/list',{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(saveStoreItemList(response.data && response.data.data)) )
+            .then(response => dispatch(saveFoodtemList(response.data && response.data.data)) )
             .catch(error => console.log("Error ", error))
     }
 }
 
-const saveStoreItemRecord=(storeItemData,authrizationKey)=>{
+const SaveFoodItemRecord=(foodItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .post('/api/store/saveStoreProduct',storeItemData,{
+            .post('/api/food/save',foodItemData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(saveStoreItemData(response.data)) )
+            .then(response => dispatch(saveFoodItemData(response.data)) )
             .catch(error => console.log("Error ", error))
     }
 }
 
-const updateStoreItemRecord=(storeItemData,authrizationKey)=>{
+const UpdateFoodItemRecord=(foodItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .put('/api/store/updateStoreProduct/'+storeItemData.store_id,storeItemData,{
+            .put('/api/food/update/'+foodItemData.food_id,foodItemData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(updateStoreItemData(response.data)) )
+            .then(response => dispatch(updateFoodItemData(response.data)) )
             .catch(error => console.log("Error ", error))
     }
 }
 
-const deleteStoreItemRecord=(storeItemData,authrizationKey)=>{
+const DeleteStoreItemRecord=(foodItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .delete('/api/store/deleteStoreProduct/'+storeItemData.store_id,{
+            .delete('/api/food/delete/'+foodItemData.food_id,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(deleteStoreItemData(response.message)) )
+            .then(response => dispatch(deleteFoodItemData(response.message)) )
             .catch(error => console.log("Error ", error))
     }
 }
@@ -59,37 +59,37 @@ const deleteStoreItemRecord=(storeItemData,authrizationKey)=>{
 
 
 //-------------------------
-export function saveStoreItemList(storeItemList){
+export function saveFoodtemList(foodItemList){
     return{
-        type:"SAVE_STORE_ITEM_LIST",
-        storeItemList
+        type:"SAVE_FOOD_ITEM_LIST",
+        foodItemList
     }
 }
 
-export function saveStoreItemData(storeItemData){
+export function saveFoodItemData(foodItemData){
     return{
-        type:"SAVE_STORE_ITEM_DATA",
-        storeItemData
+        type:"SAVE_FOOD_ITEM_DATA",
+        foodItemData
     }
 }
 
-export function updateStoreItemData(storeItemData){
+export function updateFoodItemData(foodItemData){
     return{
-        type:"UPDATE_STORE_ITEM_DATA",
-        storeItemData
+        type:"UPDATE_FOOD_ITEM_DATA",
+        foodItemData
     }
 }
 
-export function deleteStoreItemData(deleteMessage){
+export function deleteFoodItemData(deleteMessage){
     return{
-        type:"DELETE_STORE_ITEM_DATA",
+        type:"DELETE_FOOD_ITEM_DATA",
         deleteMessage
     }
 }
 
 export {
-    GetListOfStoreItem,
-    saveStoreItemRecord,
-    updateStoreItemRecord,
-    deleteStoreItemRecord
+    GetListOfFoodItem,
+    SaveFoodItemRecord,
+    UpdateFoodItemRecord,
+    DeleteStoreItemRecord   
 }
