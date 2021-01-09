@@ -7,6 +7,7 @@ import ProfileManagement from '../profile/ProfileManagement'
 import InvoiceManagement from '../InvoiceManagement/InvoiceManagement';
 import FoodManagement from '../foodManagement/FoodManagement';
 import RoomBookingManagement from '../roomBooking/RoomBookingManagement';
+import CustomerManagment from '../customer/CustomerManagement';
 
 
 export default [
@@ -51,6 +52,12 @@ export default [
         name:"Stores",
         path:"/stores",
         component:StoreManagement,
+    },
+    {
+        icon:"nc-icon nc-shop",
+        name:"Customer",
+        path:"/customerManagment",
+        component:CustomerManagment,
     },
     {
         icon:"nc-icon nc-circle-09",

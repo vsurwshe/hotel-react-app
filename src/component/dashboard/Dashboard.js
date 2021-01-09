@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as LoginAction from '../../redux/actions/LoginAction'
+import RoomBookingShedular from '../roomBooking/RoomBookingSheduler';
 
 class Dashboard extends Component {
     state = {  }
@@ -17,7 +18,7 @@ class Dashboard extends Component {
         
     }
     render() { 
-        return <h2>Dashboard</h2>
+        return  <RoomBookingShedular />
     }
 }
  

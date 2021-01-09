@@ -55,7 +55,22 @@ const getCustomerList=(authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveTodayCheckoutRoomList(response.data && response.data.data)) )
+        .then(response => dispatch(saveCustomerList(response.data && response.data.data)) )
+        .catch(error => console.log("Error ", error))
+    }
+}
+
+// this method get customer list
+const getRoomList=(authrizationKey)=>{
+    return (dispatch)=>{
+        return CreateInstance()
+        .get('/api/room/list',{
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization": "Bearer "+authrizationKey
+            }
+        })
+        .then(response => dispatch(saveRoomList(response.data && response.data.data)) )
         .catch(error => console.log("Error ", error))
     }
 }
@@ -79,7 +94,7 @@ const createRoomRecord=(roomRecord, authrizationKey)=>{
 const getRoomRecordById=(roomId, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .post('/api/room/getDetails/'+roomId, roomRecord,{
+        .get('/api/room/getDetails/'+roomId,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
@@ -109,7 +124,7 @@ const updateRoomRecord=(roomId, roomData, authrizationKey)=>{
 const deleteRoomRecord=(roomId, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .put('/api/room/deleteRoom/'+roomId, roomData,{
+        .delete('/api/room/deleteRoom/'+roomId,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
@@ -195,6 +210,14 @@ export function saveCustomerList(customerList) {
     }
 }
 
+export function saveRoomList(roomList) {
+    return {
+        type:"SAVE_ROOM_LIST",
+        roomList
+    }
+}
+
+
 export function saveRoomData(roomData) {
     return {
         type:"SAVE_ROOM_RECORD_DATA",
@@ -226,5 +249,7 @@ export{
     deleteRoomRecord,
     createRoomBookingRecord,
     updateRoomBookingRecord,
-    deleteRoomBookingRecord   
+    deleteRoomBookingRecord,
+    getCustomerList,
+    getRoomList   
 }
