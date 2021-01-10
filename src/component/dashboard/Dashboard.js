@@ -2,28 +2,38 @@ import React,{Component} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as LoginAction from '../../redux/actions/LoginAction'
+import * as RoomBookingAction from '../../redux/actions/RoomBookingAction'
 import RoomBookingShedular from '../roomBooking/RoomBookingSheduler';
 
 class Dashboard extends Component {
-    state = {  }
+    state = { 
+        loadDashBoard:false
+    }
+
+    // this method will used for handling loaddashborad
+    handelLoadDashboard=()=>{this.setState({loadDashBoard : !this.state.loadDashBoard})}
+
     componentDidMount=async()=>{
-        const {GetLogin }=this.props.LoginAction
         const { authrizations }=this.props.LoginState
-        if(authrizations === ""){
-            await GetLogin({
-                "email":"v@v.com",
-                "password":"admin@123"
-            });
-        }
+        const { listOfBookedRoom, customerList }=this.props.RoomBookingState
+        const { getBookedRoomList, getCustomerList }= this.props.RoomBookingAction
+        await this.handelLoadDashboard();
+        (listOfBookedRoom && listOfBookedRoom.length <=0) && await getBookedRoomList(authrizations);
+        (customerList && customerList.length <=0) && await getCustomerList(authrizations);
+        await this.handelLoadDashboard();
         
     }
     render() { 
-        return  <RoomBookingShedular />
+        return  <RoomBookingShedular
+            props={this.props}
+        />
     }
 }
  
 const mapStateToProps=state=>{return state}
 const mapDispatchToPorps=dispatch=>({
-    LoginAction : bindActionCreators(LoginAction, dispatch)
+    dispatch,
+    LoginAction : bindActionCreators(LoginAction, dispatch),
+    RoomBookingAction : bindActionCreators(RoomBookingAction, dispatch)
 })
 export default connect(mapStateToProps,mapDispatchToPorps)(Dashboard);

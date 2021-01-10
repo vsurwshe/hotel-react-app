@@ -79,6 +79,7 @@ class RoomBookingManagement extends Component {
         const { authrizations }=this.props.LoginState
         const { getRoomList , createRoomBookingRecord, updateRoomBookingRecord, deleteRoomBookingRecord, getFreeRoomList,getBookedRoomList, getTodayCheckoutRoomList, getCustomerList}=this.props.RoomBookingAction
         let submitData={customer_dto,room_booking_dto}
+        console.log("DATA ",submitData)
         await setLoading(true);
         if(operation === FromActions.CR){ 
             await createRoomBookingRecord(submitData,authrizations);

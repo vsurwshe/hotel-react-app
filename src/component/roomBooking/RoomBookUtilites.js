@@ -203,10 +203,11 @@ const RoomBookingModel=(propsData)=>{
     let modifyedRoomBookingData= (roomBookingDataById && Object.keys(roomBookingDataById).length >=6) && [roomBookingDataById].map(item=>{
         return {
             ...item,
-            "check_in_date": item.check_in_date && new moment(item.check_in_date).format("YYYY-MM-DD"),
-            "check_out_date": item.check_out_date && new moment(item.check_out_date).format("YYYY-MM-DD")
+            "check_in_date": item.check_in_date && new moment(item.check_in_date).format("YYYY-MM-DDTHH:MM"),
+            "check_out_date": item.check_out_date && new moment(item.check_out_date).format("YYYY-MM-DDTHH:MM")
         }
     })
+    console.log("DARA ",modifyedRoomBookingData);
     return <Dialog fullScreen open={roomBookingOpen} onClose={handelRoomBooking} TransitionComponent={Transition}>
     <AppBar className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
@@ -290,10 +291,10 @@ const LoadRoomFileds=(propsData)=>{
     return <>
         <div className="row">
             <div className="col-md-6 pr-1">
-                <Field name="check_in_date" component={renderFromTextFiled} label="Check in date" type="date" />
+                <Field name="check_in_date" component={renderFromTextFiled} label="Check in date" type="datetime-local" />
             </div>
             <div className="col-md-6 pr-1">
-                <Field name="check_out_date" component={renderFromTextFiled} label="Chech out date" type="date" />
+                <Field name="check_out_date" component={renderFromTextFiled} label="Chech out date" type="datetime-local" />
             </div>
         </div>
         <div className="row">
