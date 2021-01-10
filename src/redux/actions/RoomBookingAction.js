@@ -135,6 +135,21 @@ const deleteRoomRecord=(roomId, authrizationKey)=>{
     }
 }
 
+// this method get room record by id
+const getRoomBookingRecordById=(roomBookingId, authrizationKey)=>{
+    return (dispatch)=>{
+        return CreateInstance()
+        .get('/api/room/getBookingDetails/'+roomBookingId,{
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization": "Bearer "+authrizationKey
+            }
+        })
+        .then(response => dispatch(saveRoomBookingDataById(response.data && response.data.data)) )
+        .catch(error => console.log("Error ", error))
+    }
+}
+
 // this method save room booking record
 const createRoomBookingRecord=(roomBookingRecord, authrizationKey)=>{
     return (dispatch)=>{
@@ -232,6 +247,13 @@ export function saveRoomDataById(roomData) {
     }
 }
 
+export function saveRoomBookingDataById(roomBookingData) {
+    return {
+        type:"SAVE_ROOM_BOOKING_RECORD_DATA_BY_ID",
+        roomBookingData
+    }
+}
+
 export function saveRoomBookingData(roomBookingData) {
     return {
         type:"SAVE_ROOM_BOOKING_RECORD_DATA",
@@ -251,5 +273,6 @@ export{
     updateRoomBookingRecord,
     deleteRoomBookingRecord,
     getCustomerList,
-    getRoomList   
+    getRoomList,
+    getRoomBookingRecordById   
 }

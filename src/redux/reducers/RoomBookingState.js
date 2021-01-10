@@ -5,6 +5,7 @@ const initialState={
     roomData:[],
     roomDataById:[],
     roomBookingData:[],
+    roomBookingDataById:[],
     customerList:[],
     roomList:[],
     message:""
@@ -26,6 +27,8 @@ const RoomBookingState=(state=initialState, action)=>{
             return {...state, roomData: action.roomData}
         case "SAVE_ROOM_RECORD_DATA_BY_ID":
             return {...state, roomDataById: action.roomData}
+        case "SAVE_ROOM_BOOKING_RECORD_DATA_BY_ID":
+            return {...state, roomBookingDataById: action.roomBookingData}
         case "SAVE_ROOM_BOOKING_RECORD_DATA":
             return {...state, roomBookingData: action.roomBookingData}
         default:
