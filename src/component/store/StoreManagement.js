@@ -5,7 +5,8 @@ import StoreTable from './StoreTable';
 import * as StoreAction from '../../redux/actions/StoreAction'
 import { bindActionCreators } from 'redux';
 import StoreFrom from './StoreFrom';
-import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
+import { API_EXE_TIME, CONSTANT_MESSAGE, FromActions } from '../../assets/config/Config';
+import { checkIsObject, renderSanckBar } from '../utilites/FromUtilites';
 class StoreManagement extends Component {
     state = { 
         loadStoreItem:false,
@@ -34,12 +35,17 @@ class StoreManagement extends Component {
 
     loadStoreForm=(storeData)=>{
         const { operation }=this.state
-        return <StoreFrom 
+        const { storeItemData }=this.props.StoreState
+        const { message}=storeItemData
+        return<> 
+        {!Array.isArray(storeItemData) &&((message && checkIsObject(message)) ? renderSanckBar({open:true, message:CONSTANT_MESSAGE.ERROR_MESSAGE, color:"error"}):renderSanckBar({open:true, message:message, color:"success"}))}
+        <StoreFrom 
             SaveMethod={this.callStoreApi}
             cancel={this.handelFromAction}
             initialValues={storeData}
             operation={operation}
         />
+        </>
     }
 
     loadStoreTable=()=>{
@@ -56,7 +62,7 @@ class StoreManagement extends Component {
     callStoreApi=async(props)=>{
         const { data, setLoading, operation}=props
         const { authrizations }= this.props.LoginState
-        const { GetListOfStoreItem, saveStoreItemRecord, updateStoreItemRecord, deleteStoreItemRecord}=this.props.StoreAction
+        const { GetListOfStoreItem, saveStoreItemRecord, updateStoreItemRecord, deleteStoreItemRecord, saveStoreItemData}=this.props.StoreAction
         await setLoading(true);
         if(operation === FromActions.CR){
             await saveStoreItemRecord(data, authrizations);
@@ -69,6 +75,7 @@ class StoreManagement extends Component {
         }
         setTimeout(async()=>{
             await GetListOfStoreItem(authrizations);
+            await saveStoreItemData([]);
             await setLoading(false);
             await this.handelFromAction();
         },API_EXE_TIME)

@@ -1,5 +1,7 @@
 import { CreateInstance } from '../../assets/config/Config'
+import { ErrorFunction, SuccessFunction } from './CommanAction'
 
+// this method will get list of hotel table
 const getListOfHotelTable=(authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
@@ -14,6 +16,7 @@ const getListOfHotelTable=(authrizationKey)=>{
     }
 }
 
+// this method will save hotel table record
 const saveHotelTableRecord=(hotelTableData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
@@ -23,36 +26,38 @@ const saveHotelTableRecord=(hotelTableData,authrizationKey)=>{
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(saveHotelTableData(response.data)) )
-            .catch(error => console.log("Error ", error))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveHotelTableData, response}))
+            .catch(error => ErrorFunction({error,dispatch, errorFunctionCallBack:saveHotelTableData }))
     }
 }
 
+// this method will update hotel table record
 const updateHotelTableRecord=(hotelTableData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .put('/api/hotelTable/update/'+hotelTableData.table_id,hotelTableData,{
+            .post('/api/hotelTable/update/'+hotelTableData.table_id,hotelTableData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(updateHotelTableData(response.data)) )
-            .catch(error => console.log("Error ", error))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:updateHotelTableData, response}))
+            .catch(error => ErrorFunction({error,dispatch, errorFunctionCallBack:updateHotelTableData }))
     }
 }
 
+// this method will delete hotel table record
 const deleteHotelTableRecord=(hotelTableData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .delete('/api/hotelTable/delete/'+hotelTableData.table_id,{
+            .get('/api/hotelTable/delete/'+hotelTableData.table_id,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(deleteHotelTableData(response.message)) )
-            .catch(error => console.log("Error ", error))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:deleteHotelTableData, response}))
+            .catch(error => ErrorFunction({error,dispatch, errorFunctionCallBack:deleteHotelTableData }))
     }
 }
 

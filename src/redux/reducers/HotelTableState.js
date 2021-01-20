@@ -14,7 +14,7 @@ const HotelTableState=(state=initialState,action)=>{
         case "UPDATE_HOTEL_TABLE_DATA":
             return{...state, hotelTableData:action.hotelTableData}
         case "DELETE_HOTEL_TABLE_DATA":
-            return{...state, message:action.message}
+            return{...state, hotelTableData:action.message}
         default:
             return state;
     }

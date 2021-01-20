@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Card, CardContent, CardHeader, Dialog, DialogContent, Grid } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
+import { API_EXE_TIME, CONSTANT_MESSAGE, FromActions } from '../../assets/config/Config';
 import * as HotelTableAction from '../../redux/actions/HotelTableAction'
 import * as OrderAction from '../../redux/actions/MainOrdersAction'
 import * as StoreAction from '../../redux/actions/StoreAction'
@@ -11,6 +11,7 @@ import * as FoodAction from '../../redux/actions/FoodAction'
 import "./css/Grid.css";
 import { BookTabelForm, OrderFoodTabel, MainOrderFoodTabel } from './OrdersFroms';
 import Loader from '../utilites/Loader';
+import { checkIsObject, renderSanckBar } from '../utilites/FromUtilites';
 
 class OrdersManagement extends Component {
     state = {  
@@ -49,8 +50,11 @@ class OrdersManagement extends Component {
     }
     
     loadGrid=()=>{
+        const { dummyData }=this.props.MainOrdersState
+        const { message } = dummyData ? dummyData :""
         return <>
             <Grid container spacing={5}>
+            {( dummyData && !Array.isArray(dummyData) ) &&((message  && checkIsObject(message)) ? renderSanckBar({open:true, message:CONSTANT_MESSAGE.ERROR_MESSAGE, color:"error"}):renderSanckBar({open:true, message:message, color:"success"}))}
                 <Grid item xs={12} sm={6} >
                     <Grid item> {this.loadFreeTables()} </Grid>
                     <Grid item style={{marginTop:10}}>{this.loadBookedTables()}   </Grid>
@@ -176,10 +180,11 @@ class OrdersManagement extends Component {
         return <MainOrderFoodTabel columns={columns} data={tabelData} />
     }
 
+    // this method will call book table related api
     callBookTabelApi=async(props)=>{
         const { data, setLoading, action }=props
         const { authrizations }=this.props.LoginState
-        const { getBookTableList, getFreeTableList, createBookTabelRecord, deleteBookTabelRecord }=this.props.OrderAction
+        const { getBookTableList, getFreeTableList, createBookTabelRecord, deleteBookTabelRecord, handelErrorMessage }=this.props.OrderAction
         if(action === FromActions.CR){
             let newBookTabelData={
                 ...data,
@@ -194,15 +199,17 @@ class OrdersManagement extends Component {
         setTimeout(async()=>{
             await getBookTableList(authrizations);
             await getFreeTableList(authrizations);
+            await handelErrorMessage([]);
             setLoading && await setLoading(false);
             (action === FromActions.CR) && await this.handelBookTable();
             (action === FromActions.DE) && await this.handelOrder();
         },API_EXE_TIME)
     }
 
+    // this method call order food realted apis
     callSaveFoodApi=async(propsData)=>{
         const { data, resolve, tableData, action }=propsData
-        const { getBookTableList, createOrderTabelRecord, getOrderFoodListByTableId, updateOrderFood, deleteOrderFood }= this.props.OrderAction
+        const { getBookTableList, createOrderTabelRecord, getOrderFoodListByTableId, updateOrderFood, deleteOrderFood, handelErrorMessage }= this.props.OrderAction
         const { authrizations }=this.props.LoginState
         if(action === FromActions.CR){
             let newDataPost={
@@ -226,14 +233,15 @@ class OrdersManagement extends Component {
         setTimeout(async()=>{
             await getBookTableList(authrizations);
             (tableData) && await getOrderFoodListByTableId(tableData.booked_tabel_id, authrizations);
+            await handelErrorMessage([]);
             resolve();
         }, API_EXE_TIME)
     }
 
+    // this method call save invoice api
     callSaveInvoiceApi=(propsData)=>{
         const { data }=propsData
         const { orderFoodList }=this.props.MainOrdersState
-        // var makeInvoice = prompt("Are you sure want to make invoice ?");
         var makeInvoice = window.confirm("Are you sure want to make invoice ?");
         if (makeInvoice) {
             let foodItem=(orderFoodList && orderFoodList.length >0) && orderFoodList.filter(item=> item.table.booked_tabel_id === data.booked_tabel_id)

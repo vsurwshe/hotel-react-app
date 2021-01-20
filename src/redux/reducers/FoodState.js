@@ -1,7 +1,6 @@
 const initialState={
     listOfFoodsItem:[],
-    foodItemData:[],
-    message:""
+    foodItemData:[]
 }
 
 const FoodState=(state=initialState, action)=>{
@@ -13,7 +12,7 @@ const FoodState=(state=initialState, action)=>{
         case "UPDATE_FOOD_ITEM_DATA":
             return {...state, foodItemData: action.foodItemData}
         case "DELETE_FOOD_ITEM_DATA":
-            return {...state, message: action.message}
+            return {...state, foodItemData: action.deleteMessage}
         default:
             return state;
     }

@@ -61,12 +61,13 @@ const RoomTable=(propsData)=>{
 const createRoomRecord=(propsData)=>{
     const { newData , mainProps}=propsData
     const { authrizations }=mainProps.LoginState
-    const { createRoomRecord, getRoomList }=mainProps.RoomBookingAction
+    const { createRoomRecord, getRoomList,saveRoomData }=mainProps.RoomBookingAction
     return new Promise(async (resolve, reject) => {
         if(Object.keys(newData).length >=3){
             await createRoomRecord(newData, authrizations);
             setTimeout(async()=>{
                 await getRoomList(authrizations);
+                await saveRoomData([]);
                 resolve();
             },API_EXE_TIME)
         }else{ reject();}
@@ -77,13 +78,14 @@ const createRoomRecord=(propsData)=>{
 const updateRoomRecord=(propsData)=>{
     const { newData , mainProps}=propsData
     const { authrizations }=mainProps.LoginState
-    const { updateRoomRecord, getRoomList }=mainProps.RoomBookingAction
+    const { updateRoomRecord, getRoomList, saveRoomData }=mainProps.RoomBookingAction
     return new Promise(async (resolve, reject) => {
         if(Object.keys(newData).length >=3){
             let filterData=Object.keys(newData).length >=3 &&  [newData].map(({created_at, room_booking_status, updated_at, room_id, Key,...rest})=>rest);
             await updateRoomRecord(newData.room_id, filterData[0], authrizations);
             setTimeout(async()=>{
                 await getRoomList(authrizations);
+                await saveRoomData([]);
                 resolve();
             },API_EXE_TIME)
         }else{ reject();}
@@ -94,12 +96,13 @@ const updateRoomRecord=(propsData)=>{
 const deleteRoomRecord=(propsData)=>{
     const { oldData , mainProps}=propsData
     const { authrizations }=mainProps.LoginState
-    const { deleteRoomRecord, getRoomList }=mainProps.RoomBookingAction
+    const { deleteRoomRecord, getRoomList, saveRoomData }=mainProps.RoomBookingAction
     return new Promise(async (resolve, reject) => {
         if(Object.keys(oldData).length >=1){
             await deleteRoomRecord(oldData.room_id, authrizations);
             setTimeout(async()=>{
                 await getRoomList(authrizations);
+                await saveRoomData([]);
                 resolve();
             },API_EXE_TIME)
         }else{ reject();}
@@ -207,7 +210,6 @@ const RoomBookingModel=(propsData)=>{
             "check_out_date": item.check_out_date && new moment(item.check_out_date).format("YYYY-MM-DDTHH:MM")
         }
     })
-    console.log("DARA ",modifyedRoomBookingData);
     return <Dialog fullScreen open={roomBookingOpen} onClose={handelRoomBooking} TransitionComponent={Transition}>
     <AppBar className={classes.appBar}>
       <Toolbar className={classes.toolbar}>

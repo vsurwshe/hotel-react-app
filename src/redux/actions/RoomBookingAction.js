@@ -1,4 +1,5 @@
 import { CreateInstance } from '../../assets/config/Config'
+import { ErrorFunction, SuccessFunction } from './CommanAction';
 
 // this method get free room list
 const getFreeRoomList=(authrizationKey)=>{
@@ -10,7 +11,7 @@ const getFreeRoomList=(authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveFreeRoomList(response.data && response.data.data)) )
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveFreeRoomList, response, list:true}))
         .catch(error => console.log("Error ", error))
     }
 }
@@ -25,7 +26,7 @@ const getBookedRoomList=(authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveBookedRoomList(response.data && response.data.data)) )
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveBookedRoomList, response, list:true}))
         .catch(error => console.log("Error ", error))
     }
 }
@@ -40,7 +41,7 @@ const getTodayCheckoutRoomList=(authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveTodayCheckoutRoomList(response.data && response.data.data)) )
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveTodayCheckoutRoomList, response, list:true}))
         .catch(error => console.log("Error ", error))
     }
 }
@@ -55,7 +56,7 @@ const getCustomerList=(authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveCustomerList(response.data && response.data.data)) )
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveCustomerList, response, list:true}))
         .catch(error => console.log("Error ", error))
     }
 }
@@ -70,7 +71,7 @@ const getRoomList=(authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveRoomList(response.data && response.data.data)) )
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveRoomList, response, list:true}))
         .catch(error => console.log("Error ", error))
     }
 }
@@ -85,8 +86,8 @@ const createRoomRecord=(roomRecord, authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveRoomData(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveRoomData, response}))
+        .catch(error => ErrorFunction({error,dispatch, errorFunctionCallBack:saveRoomData}))
     }
 }
 
@@ -100,7 +101,7 @@ const getRoomRecordById=(roomId, authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveRoomDataById(response.data && response.data.data)) )
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveRoomDataById, response, list:true}))
         .catch(error => console.log("Error ", error))
     }
 }
@@ -109,14 +110,14 @@ const getRoomRecordById=(roomId, authrizationKey)=>{
 const updateRoomRecord=(roomId, roomData, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .put('/api/room/updateRoom/'+roomId, roomData,{
+        .post('/api/room/updateRoom/'+roomId, roomData,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveRoomData(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveRoomData, response}))
+        .catch(error => ErrorFunction({error, dispatch, errorFunctionCallBack:saveRoomData}))
     }
 }
 
@@ -124,14 +125,14 @@ const updateRoomRecord=(roomId, roomData, authrizationKey)=>{
 const deleteRoomRecord=(roomId, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .delete('/api/room/deleteRoom/'+roomId,{
+        .get('/api/room/deleteRoom/'+roomId,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveRoomData(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveRoomData, response}))
+        .catch(error => ErrorFunction({error, dispatch, errorFunctionCallBack:saveRoomData}))
     }
 }
 
@@ -145,7 +146,7 @@ const getRoomBookingRecordById=(roomBookingId, authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveRoomBookingDataById(response.data && response.data.data)) )
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveRoomBookingDataById, response, list:true}))
         .catch(error => console.log("Error ", error))
     }
 }
@@ -160,8 +161,8 @@ const createRoomBookingRecord=(roomBookingRecord, authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveRoomBookingData(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveRoomBookingData, response}))
+        .catch(error => ErrorFunction({error, dispatch, errorFunctionCallBack:saveRoomBookingData}))
     }
 }
 
@@ -169,14 +170,14 @@ const createRoomBookingRecord=(roomBookingRecord, authrizationKey)=>{
 const updateRoomBookingRecord=(roomBookingId,roomBookingData, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .put('/api/room/updateRoomBooking/'+roomBookingId, roomBookingData,{
+        .post('/api/room/updateRoomBooking/'+roomBookingId, roomBookingData,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveRoomBookingData(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response =>SuccessFunction({dispatch, successFunctionCallBack:saveRoomBookingData, response}))
+        .catch(error => ErrorFunction({error,dispatch,errorFunctionCallBack:saveRoomBookingData}))
     }
 }
 
@@ -184,14 +185,14 @@ const updateRoomBookingRecord=(roomBookingId,roomBookingData, authrizationKey)=>
 const deleteRoomBookingRecord=(roomBookingId, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .delete('/api/room/deleteRoomBooking/'+roomBookingId,{
+        .get('/api/room/deleteRoomBooking/'+roomBookingId,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveRoomBookingData(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveRoomBookingData, response}))
+        .catch(error => ErrorFunction({error, dispatch, errorFunctionCallBack:saveRoomBookingData}))
     }
 }
 

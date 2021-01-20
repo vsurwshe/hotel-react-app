@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
+import { API_EXE_TIME, CONSTANT_MESSAGE, FromActions } from '../../assets/config/Config';
 import * as FoodAction from '../../redux/actions/FoodAction'
+import { checkIsObject, renderSanckBar } from '../utilites/FromUtilites';
 import Loader from '../utilites/Loader';
 import FoodForm from './FoodForm';
 import FoodTabel from './FoodTable'
@@ -35,12 +36,17 @@ class FoodManagement extends Component {
 
     loadFoodForm=(storeData)=>{
         const { operation }=this.state
-        return <FoodForm
-            SaveMethod={this.callStoreApi}
-            cancel={this.handelFromAction}
-            initialValues={storeData}
-            operation={operation}
-        />
+        const { foodItemData }=this.props.FoodState
+        const { message }=foodItemData
+        return <>
+        {!Array.isArray(foodItemData) &&((message && checkIsObject(message)) ? renderSanckBar({open:true, message:CONSTANT_MESSAGE.ERROR_MESSAGE, color:"error"}):renderSanckBar({open:true, message:message, color:"success"}))}
+            <FoodForm
+                SaveMethod={this.callStoreApi}
+                cancel={this.handelFromAction}
+                initialValues={storeData}
+                operation={operation}
+            />
+        </>
     }
 
     loadFoodTable=()=>{
@@ -55,7 +61,7 @@ class FoodManagement extends Component {
     callStoreApi=async(props)=>{
         const { data, setLoading, operation}=props
         const { authrizations }= this.props.LoginState
-        const { GetListOfFoodItem, SaveFoodItemRecord, UpdateFoodItemRecord, DeleteStoreItemRecord}=this.props.FoodAction
+        const { GetListOfFoodItem, SaveFoodItemRecord, UpdateFoodItemRecord, DeleteStoreItemRecord, saveFoodItemData}=this.props.FoodAction
         await setLoading(true);
         if(operation === FromActions.CR){
             await SaveFoodItemRecord(data, authrizations);
@@ -68,6 +74,7 @@ class FoodManagement extends Component {
         }
         setTimeout(async()=>{
             await GetListOfFoodItem(authrizations);
+            await saveFoodItemData([]);
             await setLoading(false);
             await this.handelFromAction();
         },API_EXE_TIME)

@@ -1,11 +1,12 @@
 import { CreateInstance, HeaderConfig } from '../../assets/config/Config';
+import { ErrorFunction, SuccessFunction } from './CommanAction';
 
 // this method will get list of invoice
 const getListOfInvoice=(authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
             .get('/api/invoice/list',HeaderConfig(authrizationKey))
-            .then(response => dispatch(saveInvoiceList(response.data && response.data.data)) )
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveInvoiceList, response, list:true}))
             .catch(error => console.log("Error ", error))
     }
 }
@@ -15,7 +16,7 @@ const getInvoiceById=(invoiceId,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
             .get('/api/invoice/getData/'+invoiceId,HeaderConfig(authrizationKey))
-            .then(response => dispatch(saveInvoiceById(response.data && response.data.data)) )
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveInvoiceById, response, list:true}))
             .catch(error => console.log("Error ", error))
     }
 }
@@ -25,8 +26,8 @@ const postInvoiceData=(invoiceData, authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
             .post('/api/invoice/save',invoiceData,HeaderConfig(authrizationKey))
-            .then(response => dispatch(saveInvoiceData(response.data && response.data.data)) )
-            .catch(error => console.log("Error ", error))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveInvoiceData, response}))
+            .catch(error => ErrorFunction({error,dispatch, errorFunctionCallBack:saveInvoiceData}))
     }
 }
 
@@ -34,9 +35,9 @@ const postInvoiceData=(invoiceData, authrizationKey)=>{
 const updateInvoiceData=(invoiceID,invoiceData, authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .put('/api/invoice/update/'+invoiceID,invoiceData,HeaderConfig(authrizationKey))
-            .then(response => dispatch(saveInvoiceData(response.data && response.data.data)) )
-            .catch(error => console.log("Error ", error))
+            .post('/api/invoice/update/'+invoiceID,invoiceData,HeaderConfig(authrizationKey))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveInvoiceData, response}))
+            .catch(error => ErrorFunction({error,dispatch, errorFunctionCallBack:saveInvoiceData}))
     }
 }
 
@@ -44,9 +45,9 @@ const updateInvoiceData=(invoiceID,invoiceData, authrizationKey)=>{
 const deleteInvoiceData=(invoiceID,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .delete('/api/invoice/delete/'+invoiceID,HeaderConfig(authrizationKey))
-            .then(response => dispatch(saveInvoiceData(response.data && response.data.data)) )
-            .catch(error => console.log("Error ", error))
+            .get('/api/invoice/delete/'+invoiceID,HeaderConfig(authrizationKey))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveInvoiceData, response}))
+            .catch(error => ErrorFunction({error,dispatch, errorFunctionCallBack:saveInvoiceData}))
     }
 }
 //-----------------------
@@ -69,6 +70,13 @@ export function saveInvoiceData(invoiceData) {
     return {
         type:"SAVE_INVOICE_DATA",
         invoiceData
+    }
+}
+
+export function saveMessageData(messageData) {
+    return {
+        type:"SAVE_MESSAGE_DATA",
+        messageData
     }
 }
 

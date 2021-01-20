@@ -9,20 +9,21 @@ const Invoice=(props)=>{
     const { data }=props
     const { invoiceDataById }=props.InvoiceState
     const { authrizations }=props.LoginState
-    const { getInvoiceById}=props.InvoiceAction
+    const { getInvoiceById, saveMessageData}=props.InvoiceAction
     const [count, setCountValues] = useState(0)
     let exitsInvoiceDataById= (invoiceDataById && invoiceDataById.length >0) && invoiceDataById.filter(item=> item.invoice_id === data.invoice_id)
     if((exitsInvoiceDataById === false || exitsInvoiceDataById.length <= 0) && count ===0){
-         getInvoiceDetails({getInvoiceById, authrizations, data, count, setCountValues}) 
+         getInvoiceDetails({getInvoiceById, authrizations, data, count, setCountValues, saveMessageData}) 
          exitsInvoiceDataById= (invoiceDataById && invoiceDataById.length >0) && invoiceDataById.filter(item=> item.invoice_id === data.invoice_id)
     }
     return (exitsInvoiceDataById && exitsInvoiceDataById.length > 0) ? <Loader message="Loading..." size={40} /> : MainTableSection({"mainProps":props}) 
 }
 
 // this method calling invoice api for fecthing data
-const getInvoiceDetails=async({getInvoiceById, authrizations, data, count, setCountValues})=>{
+const getInvoiceDetails=async({getInvoiceById, authrizations, data, count, setCountValues,saveMessageData})=>{
     await setCountValues(count+1)
     await getInvoiceById(data.invoice_id, authrizations)
+    await saveMessageData([]);
 }
 
 const MainTableSection=(propsData)=>{

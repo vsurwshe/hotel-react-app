@@ -23,7 +23,7 @@ const renderTextFiled=({type, name, placeholder, dataValidate, input, meta: { to
 // this compoent rendering text filed on login screen
 const renderLoginTextFiled=({type, name, placeholder, dataValidate, label, input, meta: { touched, invalid, error }, ...custom})=>(
     <p>
-        <label for={name}>{label}</label>
+        <label htmlFor={name}>{label}</label>
         <input 
             id={name}
             type={type} 
@@ -135,7 +135,12 @@ const dwonloadInvoice = (docId) => {
         pdf.addImage(imgData, 'PNG', 25, 70);
         pdf.save("downloadInvoice.pdf");
     });
-  }
+}
+
+// this will return object or not
+const checkIsObject=(data)=>{
+    return data && typeof data === 'object' && data.constructor === Object;
+}
   
 
 export{
@@ -148,5 +153,6 @@ export{
     renderSelectFileds,
     renderLoginTextFiled,
     renderSanckBar,
-    dwonloadInvoice
+    dwonloadInvoice,
+    checkIsObject
 }

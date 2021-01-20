@@ -6,7 +6,8 @@ import * as HotelTableAction from '../../redux/actions/HotelTableAction';
 import * as MainOrdersAction from '../../redux/actions/MainOrdersAction';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
+import { API_EXE_TIME, CONSTANT_MESSAGE, FromActions } from '../../assets/config/Config';
+import { checkIsObject, renderSanckBar } from '../utilites/FromUtilites';
 
 class TableManagement extends Component {
     state = { 
@@ -34,14 +35,19 @@ class TableManagement extends Component {
         return formAction ? this.loadHotelTableFrom(hotelTableData) : this.loadHotelTable();
     }
 
-    loadHotelTableFrom=(hotelTableData)=>{
+    loadHotelTableFrom=(propsHotelTableData)=>{
         const { operation }=this.state
-        return <HotelTabelFrom
-            SaveMethod={this.callHotelTableApi}
-            operation={operation}
-            initialValues={hotelTableData}
-            cancel={this.handelFromAction}
-        />
+        const { hotelTableData }=this.props.HotelTableState
+        const { message }=hotelTableData
+        return <>
+            {!Array.isArray(hotelTableData) &&((message && checkIsObject(message)) ? renderSanckBar({open:true, message:CONSTANT_MESSAGE.ERROR_MESSAGE, color:"error"}):renderSanckBar({open:true, message:message, color:"success"}))}
+            <HotelTabelFrom
+                SaveMethod={this.callHotelTableApi}
+                operation={operation}
+                initialValues={propsHotelTableData}
+                cancel={this.handelFromAction}
+            />
+        </>
     }
 
     loadHotelTable=()=>{
@@ -58,7 +64,7 @@ class TableManagement extends Component {
     callHotelTableApi=async(props)=>{
         const { data, setLoading, operation}=props
         const { authrizations }= this.props.LoginState
-        const { getListOfHotelTable, saveHotelTableRecord, updateHotelTableRecord, deleteHotelTableRecord}=this.props.HotelTableAction
+        const { getListOfHotelTable, saveHotelTableRecord, updateHotelTableRecord, deleteHotelTableRecord, saveHotelTableData}=this.props.HotelTableAction
         const { getFreeTableList }=this.props.MainOrdersAction
         await setLoading(true);
         if(operation === FromActions.CR){
@@ -73,6 +79,7 @@ class TableManagement extends Component {
         setTimeout(async()=>{
             await getListOfHotelTable(authrizations);
             await getFreeTableList(authrizations);
+            await saveHotelTableData([]);
             await setLoading(false);
             await this.handelFromAction();
         },API_EXE_TIME)

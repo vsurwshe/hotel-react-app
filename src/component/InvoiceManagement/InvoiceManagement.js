@@ -6,8 +6,8 @@ import InvoiceTabel from './InvoiceTabel';
 import * as InvoiceAction from "../../redux/actions/InvoiceAction"
 import Loader from '../utilites/Loader';
 import Invoice from './Invoice';
-import { dwonloadInvoice } from '../utilites/FromUtilites';
-import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
+import { checkIsObject, dwonloadInvoice, renderSanckBar } from '../utilites/FromUtilites';
+import { API_EXE_TIME, CONSTANT_MESSAGE, FromActions } from '../../assets/config/Config';
 class InvoiceManagement extends Component {
     state = { 
         loadInvoiceValue: false,
@@ -44,8 +44,11 @@ class InvoiceManagement extends Component {
     // this method will used for the loading invoice model
     loadInvoiceModel=()=>{
         const { viewInvoice, fetchedInvoiceData, action }=this.state
+        const { messageData }=this.props.InvoiceState
+        const { message }=messageData ? messageData :""
         return <Dialog open={viewInvoice} onClose={()=>this.handelViewInvoice()} fullWidth={true} maxWidth = {'md'}>
             <DialogContent>
+            {!Array.isArray(messageData) &&((message && checkIsObject(message)) ? renderSanckBar({open:true, message:CONSTANT_MESSAGE.ERROR_MESSAGE, color:"error"}):renderSanckBar({open:true, message:message, color:"success"}))}
                 <Invoice data={fetchedInvoiceData} />
                 <div style={{float:"right", marginTop:10}}>
                     { action === FromActions.VI && <Button type="button" variant="outlined" color="primary" onClick={() => dwonloadInvoice("hotelInvoiceId")}> Download Invoice </Button>}
@@ -60,13 +63,14 @@ class InvoiceManagement extends Component {
     deleteInvoice=async()=>{
         const {fetchedInvoiceData }=this.state
         const { authrizations }=this.props.LoginState
-        const { getListOfInvoice, deleteInvoiceData }= this.props.InvoiceAction
+        const { getListOfInvoice, deleteInvoiceData, saveMessageData }= this.props.InvoiceAction
         var makeInvoice = window.confirm("Are you sure want to delete invoice ?");
         if(makeInvoice){
             await this.handelLoadInvoiceValue();
             await deleteInvoiceData(fetchedInvoiceData.invoice_id, authrizations)
             setTimeout(async()=>{
                 await getListOfInvoice(authrizations);
+                await saveMessageData([]);
                 await this.handelViewInvoice();
                 await this.handelLoadInvoiceValue();
             }, API_EXE_TIME)

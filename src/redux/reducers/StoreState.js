@@ -1,7 +1,6 @@
 const initialState={
     listOfStoreItem:[],
-    storeItemData:[],
-    message:""
+    storeItemData:[]
 }
 
 const StoreState=(state=initialState, action)=>{
@@ -13,7 +12,7 @@ const StoreState=(state=initialState, action)=>{
         case "UPDATE_STORE_ITEM_DATA":
             return {...state, storeItemData: action.storeItemData}
         case "DELETE_STORE_ITEM_DATA":
-            return {...state, message: action.message}
+            return {...state, storeItemData: action.deleteMessage}
         default:
             return state;
     }

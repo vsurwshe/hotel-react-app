@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { API_EXE_TIME, FromActions } from '../../assets/config/Config';
+import { API_EXE_TIME, CONSTANT_MESSAGE, FromActions } from '../../assets/config/Config';
 import * as RoomBookingAction from '../../redux/actions/RoomBookingAction'
+import { checkIsObject, renderSanckBar } from '../utilites/FromUtilites';
 import Loader from '../utilites/Loader';
 import { RoomBookingModel, RoomBookingTable, RoomTable } from './RoomBookUtilites';
 
@@ -38,8 +39,11 @@ class RoomBookingManagement extends Component {
 
     // this method will help to show room tabel
     loadRoomTable=()=>{
+        const { roomData }=this.props.RoomBookingState
+        const { message }=roomData
         return <>
             {this.loadRoomBooking()}
+            {!Array.isArray(roomData) &&((message && checkIsObject(message)) ? renderSanckBar({open:true, message:CONSTANT_MESSAGE.ERROR_MESSAGE, color:"error"}):renderSanckBar({open:true, message:message, color:"success"}))}
             <RoomTable 
                 props={this.props}
                 handelRoomBooking={this.handelRoomBooking}
@@ -50,7 +54,10 @@ class RoomBookingManagement extends Component {
     // this method will help to load room booking table
     loadRoomBookingTable=()=>{
         const { operation}=this.state
+        const { roomBookingData }=this.props.RoomBookingState
+        const { message }=roomBookingData
         return <div style={{marginTop:10}}>
+            {!Array.isArray(roomBookingData) &&((message && checkIsObject(message)) ? renderSanckBar({open:true, message:CONSTANT_MESSAGE.ERROR_MESSAGE, color:"error"}):renderSanckBar({open:true, message:message, color:"success"}))}
             <RoomBookingTable 
                 props={this.props}
                 handelRoomBooking={this.handelRoomBooking}
@@ -77,7 +84,7 @@ class RoomBookingManagement extends Component {
     callApiRoomBooking=async(propsData)=>{
         const { customer_dto, room_booking_dto, values, setLoading, operation}=propsData
         const { authrizations }=this.props.LoginState
-        const { getRoomList , createRoomBookingRecord, updateRoomBookingRecord, deleteRoomBookingRecord, getFreeRoomList,getBookedRoomList, getTodayCheckoutRoomList, getCustomerList}=this.props.RoomBookingAction
+        const { getRoomList , createRoomBookingRecord, updateRoomBookingRecord, deleteRoomBookingRecord, getFreeRoomList,getBookedRoomList, getTodayCheckoutRoomList, getCustomerList, saveRoomBookingData}=this.props.RoomBookingAction
         let submitData={customer_dto,room_booking_dto}
         console.log("DATA ",submitData)
         await setLoading(true);
@@ -94,6 +101,7 @@ class RoomBookingManagement extends Component {
             await getBookedRoomList(authrizations);
             await getTodayCheckoutRoomList(authrizations);
             await getCustomerList(authrizations);
+            await saveRoomBookingData([]);
             await setLoading(false);
             await this.handelRoomBooking();
         },API_EXE_TIME)
