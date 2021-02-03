@@ -1,5 +1,7 @@
 import { CreateInstance } from '../../assets/config/Config'
+import { ErrorFunction, SuccessFunction } from './CommanAction'
 
+// this method will get list of store items
 const GetListOfStoreItem=(authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
@@ -9,11 +11,12 @@ const GetListOfStoreItem=(authrizationKey)=>{
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(saveStoreItemList(response.data && response.data.data)) )
+            .then(response => SuccessFunction({dispatch,successFunctionCallBack:saveStoreItemList, response, list:true }))
             .catch(error => console.log("Error ", error))
     }
 }
 
+// this method will save store item record
 const saveStoreItemRecord=(storeItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
@@ -23,36 +26,38 @@ const saveStoreItemRecord=(storeItemData,authrizationKey)=>{
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(saveStoreItemData(response.data)) )
-            .catch(error => console.log("Error ", error))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveStoreItemData, response}))
+            .catch(error => ErrorFunction({dispatch, error, errorFunctionCallBack:saveStoreItemData}))
     }
 }
 
+// this method will update store item
 const updateStoreItemRecord=(storeItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .put('/api/store/updateStoreProduct/'+storeItemData.store_id,storeItemData,{
+            .post('/api/store/updateStoreProduct/'+storeItemData.store_id,storeItemData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(updateStoreItemData(response.data)) )
-            .catch(error => console.log("Error ", error))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:updateStoreItemData, response}))
+            .catch(error => ErrorFunction({dispatch,error, errorFunctionCallBack:updateStoreItemData}))
     }
 }
 
+// this method will delete store item record
 const deleteStoreItemRecord=(storeItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .delete('/api/store/deleteStoreProduct/'+storeItemData.store_id,{
+            .get('/api/store/deleteStoreProduct/'+storeItemData.store_id,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(deleteStoreItemData(response.message)) )
-            .catch(error => console.log("Error ", error))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:deleteStoreItemData, response}))
+            .catch(error =>ErrorFunction({dispatch, error, errorFunctionCallBack:deleteStoreItemData}))
     }
 }
 

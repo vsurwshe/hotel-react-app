@@ -1,5 +1,7 @@
 import { CreateInstance } from '../../assets/config/Config'
+import { ErrorFunction, SuccessFunction } from './CommanAction'
 
+// this method will used for get list of food items 
 const GetListOfFoodItem=(authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
@@ -9,11 +11,12 @@ const GetListOfFoodItem=(authrizationKey)=>{
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(saveFoodtemList(response.data && response.data.data)) )
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack: saveFoodtemList, response, list:true}))
             .catch(error => console.log("Error ", error))
     }
 }
 
+// this method will used for save of food item record
 const SaveFoodItemRecord=(foodItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
@@ -23,40 +26,40 @@ const SaveFoodItemRecord=(foodItemData,authrizationKey)=>{
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(saveFoodItemData(response.data)) )
-            .catch(error => console.log("Error ", error))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveFoodItemData, response}))
+            .catch(error => ErrorFunction({dispatch, error,errorFunctionCallBack:saveFoodItemData}))
     }
 }
 
+// this method will used for update of food item record
 const UpdateFoodItemRecord=(foodItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .put('/api/food/update/'+foodItemData.food_id,foodItemData,{
+            .post('/api/food/update/'+foodItemData.food_id,foodItemData,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(updateFoodItemData(response.data)) )
-            .catch(error => console.log("Error ", error))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:updateFoodItemData, response}))
+            .catch(error => ErrorFunction({error, dispatch, errorFunctionCallBack:updateFoodItemData}))
     }
 }
 
+// this method will used for delete of food item record
 const DeleteStoreItemRecord=(foodItemData,authrizationKey)=>{
     return(dispatch)=>{
         return CreateInstance()
-            .delete('/api/food/delete/'+foodItemData.food_id,{
+            .get('/api/food/delete/'+foodItemData.food_id,{
                 headers:{
                     "Content-Type":"application/json",
                     "Authorization": "Bearer "+authrizationKey
                 }
             })
-            .then(response => dispatch(deleteFoodItemData(response.message)) )
-            .catch(error => console.log("Error ", error))
+            .then(response => SuccessFunction({dispatch, successFunctionCallBack:deleteFoodItemData, response}))
+            .catch(error => ErrorFunction({error, dispatch, errorFunctionCallBack:deleteFoodItemData}))
     }
 }
-
-
 
 //-------------------------
 export function saveFoodtemList(foodItemList){

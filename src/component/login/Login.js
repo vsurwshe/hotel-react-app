@@ -52,12 +52,12 @@ let LoginFrom = (props) => {
         {(message && color && message !== "" && color !== "") && renderSanckBar({ open: (message && color && message !== "" && color !== "") ?true :false, color,message})}
         <form className="form-class" onSubmit={handleSubmit(SaveMethod)}>
             <h1>Admin Dashborad Sign-In</h1>
-            <div class="inset">
+            <div className="inset">
                 <Field name="email" component={renderLoginTextFiled} type="text1" label="EMAIL ADDRESS" placeholder="Enter your email" />
                 <Field name="password" component={renderLoginTextFiled} type="password" label="PASSWORD" placeholder="Enter your password" />
             </div>
             {loading && <Loader message="" size={40} />}
-            <p class="p-container">
+            <p className="p-container">
                 <input type="submit" value="Log in" style={{float:"left"}} disabled={pristine || submitting} />
                 <span style={{float:"right"}}>Forgot password ?</span>
             </p>

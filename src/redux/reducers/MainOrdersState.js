@@ -4,7 +4,8 @@ const initialState={
     orderFoodList:[],
     bookTabelData:[],
     orderData:[],
-    bookedTabelFoodList:[]
+    bookedTabelFoodList:[],
+    dummyData:[]
 }
 
 const MainOrdersState=(state=initialState, action)=>{
@@ -17,14 +18,18 @@ const MainOrdersState=(state=initialState, action)=>{
             return {...state, listOfFreeTabels:action.tableData}
         case "SAVE_BOOK_TABEL_RECORD":
             return {...state, bookTabelData:action.tableData}
+        case "SAVE_DELETE_BOOK_TABEL_RECORD":
+            return {...state, dummyData:action.deleteMessage}
         case "SAVE_ORDER_TABEL_RECORD":
-            return {...state, orderData:action.orderData}
+            return {...state, orderData:action.orderData.foodData, dummyData:{message:action.orderData.message}}
         case "SAVE_ORDER_FOOD_LIST_BY_TABEL_ID":
             return {...state, bookedTabelFoodList:action.foodData}
         case "SAVE_UPDATE_ORDER_FOOD_RECORD":
-            return {...state, orderData:action.foodData}
+            return {...state, orderData:action.foodData.data,dummyData:{message:action.foodData.message}}
         case "SAVE_DELETE_ORDER_FOOD_RECORD":
-            return {...state, orderData:action.foodData}
+            return {...state, dummyData:action.foodData}
+        case "HANDLE_ERROR_ORDER_FOOD_RECORD":
+            return {...state, dummyData:action.deleteMessage}
         default:
             return state;
     }

@@ -2,7 +2,6 @@ import React from 'react';
 import MaterialTable from "material-table";
 import { connect } from 'react-redux';
 import moment from 'moment'
-import CreateIcon from '@material-ui/icons/Create';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { FromActions } from '../../assets/config/Config';

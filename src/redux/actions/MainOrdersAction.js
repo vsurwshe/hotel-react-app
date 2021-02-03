@@ -1,5 +1,7 @@
 import { CreateInstance } from '../../assets/config/Config'
+import { ErrorFunction, SuccessFunction } from './CommanAction'
 
+// this method get list of booked table
 const getBookTableList=(authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
@@ -9,11 +11,12 @@ const getBookTableList=(authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveBookTableList(response.data && response.data.data)) )
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveBookTableList, response, list:true}))
         .catch(error => console.log("Error ", error))
     }
 }
 
+// this method get list of free table
 const getFreeTableList=(authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
@@ -23,11 +26,12 @@ const getFreeTableList=(authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveFreeTabelList(response.data && response.data.data)) )
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveFreeTabelList, response, list:true}))
         .catch(error => console.log("Error ", error))
     }
 }
 
+// this method will save table record
 const createBookTabelRecord=(tabelRecord, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
@@ -37,25 +41,27 @@ const createBookTabelRecord=(tabelRecord, authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveBookTabelRecord(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveBookTabelRecord, response}))
+        .catch(error => ErrorFunction({error, dispatch, errorFunctionCallBack:handelErrorMessage}))
     }
 }
 
+// this method delete table record
 const deleteBookTabelRecord=(tabelRecordId, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .delete('/api/orders/table/delete/'+tabelRecordId,{
+        .get('/api/orders/table/delete/'+tabelRecordId,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveDeleteBookTabelRecord(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveDeleteBookTabelRecord, response}))
+        .catch(error => ErrorFunction({error,dispatch,errorFunctionCallBack:handelErrorMessage}))
     }
 }
 
+// this method save order table
 const createOrderTabelRecord=(orderRecord, authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
@@ -65,11 +71,12 @@ const createOrderTabelRecord=(orderRecord, authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveOrderTabelRecord(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveOrderTabelRecord, response}))
+        .catch(error => ErrorFunction({dispatch, error, errorFunctionCallBack:handelErrorMessage}))
     }
 }
 
+// this method get orered food list by table id
 const getOrderFoodListByTableId=(bookedTableId,authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
@@ -79,36 +86,38 @@ const getOrderFoodListByTableId=(bookedTableId,authrizationKey)=>{
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveOrderFoodListByTableId(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveOrderFoodListByTableId, response, list:true}))
+        .catch(error => ErrorFunction({error, dispatch,errorFunctionCallBack: handelErrorMessage}))
     }
 }
 
+// this method will update order food record
 const updateOrderFood=(foodData,authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .put('/api/orders/food/update/'+foodData.order_food_id,foodData,{
+        .post('/api/orders/food/update/'+foodData.order_food_id,foodData,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveOrderFoodRecord(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveOrderFoodRecord, response}))
+        .catch(error => ErrorFunction({error, dispatch, errorFunctionCallBack:handelErrorMessage}))
     }
 }
 
+// this method delete order food record
 const deleteOrderFood=(foodId,authrizationKey)=>{
     return (dispatch)=>{
         return CreateInstance()
-        .delete('/api/orders/food/delete/'+foodId,{
+        .get('/api/orders/food/delete/'+foodId,{
             headers:{
                 "Content-Type":"application/json",
                 "Authorization": "Bearer "+authrizationKey
             }
         })
-        .then(response => dispatch(saveDeleteFoodRecord(response.data && response.data.data)) )
-        .catch(error => console.log("Error ", error))
+        .then(response => SuccessFunction({dispatch, successFunctionCallBack:saveDeleteFoodRecord, response}))
+        .catch(error => ErrorFunction({error, dispatch, errorFunctionCallBack:handelErrorMessage}))
     }
 }
 
@@ -134,10 +143,10 @@ export function saveBookTabelRecord(tabelData) {
     }
 }
 
-export function saveDeleteBookTabelRecord(tabelData) {
+export function saveDeleteBookTabelRecord(deleteMessage) {
     return {
-        type:"SAVE_DELTE_BOOK_TABEL_RECORD",
-        tabelData
+        type:"SAVE_DELETE_BOOK_TABEL_RECORD",
+        deleteMessage
     }
 }
 
@@ -166,6 +175,13 @@ export function saveDeleteFoodRecord(foodData) {
     return {
         type:"SAVE_DELETE_ORDER_FOOD_RECORD",
         foodData
+    }
+}
+
+export function handelErrorMessage(message) {
+    return {
+        type:"HANDLE_ERROR_ORDER_FOOD_RECORD",
+        message
     }
 }
 

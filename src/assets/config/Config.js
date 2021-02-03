@@ -1,6 +1,7 @@
 import Axios from "axios";
 const {apiUrl}= window['runConfig'];
 const API_EXE_TIME=500;
+
 const CreateInstance=()=> {
     let instance = Axios.create({
       baseURL: apiUrl,
@@ -16,6 +17,10 @@ const FromActions={
   "VIED":"VIEWEDIT"
 }
 
+const CONSTANT_MESSAGE={
+  ERROR_MESSAGE:"Something went wrong, Please try again some after Time...!"
+}
+
 const HeaderConfig=(authrizationKey)=>{
   return {
     headers:{
@@ -27,6 +32,7 @@ const HeaderConfig=(authrizationKey)=>{
 
 export{
     API_EXE_TIME,
+    CONSTANT_MESSAGE,
     apiUrl,
     CreateInstance,
     FromActions,

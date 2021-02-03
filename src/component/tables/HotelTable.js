@@ -52,7 +52,7 @@ const HotelTabel=(props)=>{
       headerStyle: { backgroundColor: '#01579b', color: '#FFF' }
     }}
     actions={[
-      { icon: () => <div><Button variant="contained" color="primary">Add Table</Button></div>,
+      { icon: () => <div><Button variant="contained" color="primary">Add</Button></div>,
         onClick: (event, rowData) => { fromAction(null, FromActions.CR); },
         isFreeAction: true,
         tooltip: 'Add Table'

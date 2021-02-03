@@ -14,7 +14,6 @@ const StoreTable=(props)=>{
       { title: 'Sr.\u00a0No.', field: 'key', width: 20 },
       { title: 'Product\u00a0Name', field: 'store_product_name' },
       { title: 'Product\u00a0Quantity', field: 'store_product_qty' },
-      // { title: 'Product\u00a0Per\u00a0Unit\u00a0Price', field: 'product_unit_price', width: 20 },
       { title: 'Product\u00a0Total\u00a0Price', field: 'store_product_total_price', width: 20 },
       {
         title: "",
@@ -52,7 +51,7 @@ const StoreTable=(props)=>{
       headerStyle: { backgroundColor: '#01579b', color: '#FFF' }
     }}
     actions={[
-      { icon: () => <div><Button variant="contained" color="primary">Add Item</Button></div>,
+      { icon: () => <div><Button variant="contained" color="primary">Add</Button></div>,
         onClick: (event, rowData) => { storeFromAction(null, FromActions.CR); },
         isFreeAction: true,
         tooltip: 'Add Item'
